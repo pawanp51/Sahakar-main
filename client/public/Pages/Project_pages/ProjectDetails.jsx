@@ -2,37 +2,12 @@ import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Briefcase, CheckSquare, Users, Clock } from 'lucide-react';
 import Navbar from './Navbar';
+import { useProjContext } from '../../ContextApi/ProjContext';
 
 const ProjectDetails = () => {
+
   const [timeRange, setTimeRange] = useState('Last 30 days');
-
-  const summaryData = [
-    { name: 'Projects', value: 850, total: 1100, icon: Briefcase, color: '#10B981', change: 10 },
-    { name: 'Tasks', value: 100, total: 110, icon: CheckSquare, color: '#EF4444', change: -5 },
-    { name: 'Resources', value: 85, total: 90, icon: Users, color: '#3B82F6', change: 8 },
-    { name: 'Time Spent', value: 752, total: 885, icon: Clock, color: '#F59E0B', change: -3 },
-  ];
-
-  const projectData = [
-    { name: 'Parks and Recreation', status: 'Completed', progress: 100 },
-    { name: 'Public Works', status: 'On Track', progress: 60 },
-    { name: 'Environmental Protection', status: 'Delayed', progress: 30 },
-    { name: 'Budget Management', status: 'At Risk', progress: 20 },
-  ];
-
-  const milestoneData = [
-    { name: 'Project Initiation', status: 'Completed', progress: 100 },
-    { name: 'Design Phase', status: 'On Track', progress: 80 },
-    { name: 'Construction Start', status: 'Delayed', progress: 50 },
-    { name: 'Environmental Impact Assessment', status: 'At Risk', progress: 40 },
-  ];
-
-  const overallProgress = 70;
-  const progressBreakdown = [
-    { name: 'Completed', value: 15, color: '#10B981' },
-    { name: 'In Progress', value: 5, color: '#3B82F6' },
-    { name: 'Delayed', value: 4, color: '#F59E0B' },
-  ];
+  const {projectdetails} = useProjContext();
 
   return (
     <div className="min-h-screen bg-white-100">
@@ -52,7 +27,7 @@ const ProjectDetails = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {summaryData.map((item) => (
+          {projectdetails.summaryData.map((item) => (
             <div key={item.name} className="bg-white p-4 rounded-lg shadow">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-500">{item.name}</span>
@@ -82,7 +57,7 @@ const ProjectDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {projectData.map((project) => (
+                  {projectdetails.projectData.map((project) => (
                     <tr key={project.name} className="border-t">
                       <td className="py-2">{project.name}</td>
                       <td className="py-2">
@@ -110,7 +85,7 @@ const ProjectDetails = () => {
             <div className="flex items-center justify-between">
               <PieChart width={160} height={160}>
                 <Pie
-                  data={progressBreakdown}
+                  data={projectdetails.progressBreakdown}
                   cx={80}
                   cy={80}
                   innerRadius={60}
@@ -118,17 +93,17 @@ const ProjectDetails = () => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {progressBreakdown.map((entry, index) => (
+                  {projectdetails.progressBreakdown.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
               </PieChart>
               <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600">{overallProgress}%</div>
+                <div className="text-4xl font-bold text-blue-600">{projectdetails.overallProgress}%</div>
                 <div className="text-sm text-gray-500">Completed</div>
               </div>
               <div>
-                {progressBreakdown.map((item) => (
+                {projectdetails.progressBreakdown.map((item) => (
                   <div key={item.name} className="flex items-center mb-1">
                     <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: item.color }}></div>
                     <span className="text-sm">
@@ -153,7 +128,7 @@ const ProjectDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {milestoneData.map((milestone) => (
+                {projectdetails.milestoneData.map((milestone) => (
                   <tr key={milestone.name} className="border-t">
                     <td className="py-2">{milestone.name}</td>
                     <td className="py-2">
@@ -181,14 +156,15 @@ const ProjectDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <h3 className="font-semibold mb-2">Objectives</h3>
-              <p>Increase urban green spaces by 30% in three years.</p>
+              <p>{projectdetails.objectives}</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Departments</h3>
               <ul className="list-disc list-inside">
-                <li>Parks and Recreation: Design layouts</li>
-                <li>Public Works: Manage construction</li>
-                <li>Environmental Protection: Monitor compliance</li>
+               {projectdetails.departments.map((department) =>
+                <li key={department}>{department}</li> 
+              )
+              }
               </ul>
             </div>
             <div>
@@ -198,34 +174,35 @@ const ProjectDetails = () => {
             <div>
               <h3 className="font-semibold mb-2">Timeline</h3>
               <ul className="list-disc list-inside">
-                <li>Start: January 2025</li>
-                <li>First Green Space Opening: April 2026</li>
-                <li>Completion: December 2027</li>
+              {projectdetails.timeline.map((timeline) =>
+                <li key={timeline}>{timeline}</li> 
+              )
+              }
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Stakeholders</h3>
-              <p>Local community groups, NGOs, city council</p>
+              <p>{projectdetails.stakeholders}</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Risks</h3>
-              <p>Budget overruns, community resistance, weather delays</p>
+              <p>{projectdetails.risks}</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Communication</h3>
-              <p>Monthly meetings internally; quarterly public newsletters</p>
+              <p>{projectdetails.communication}</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Metrics</h3>
-              <p>Number of green spaces created, community engagement, air quality improvement</p>
+              <p>{projectdetails.metrics}</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Legal Compliance</h3>
-              <p>Adherence to zoning and environmental regulations</p>
+              <p>{projectdetails.legal}</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Sustainability</h3>
-              <p>Community gardens for maintenance; $100,000 annual upkeep budget</p>
+              <p>{projectdetails.sustainability}</p>
             </div>
           </div>
         </div>

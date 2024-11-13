@@ -1,19 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaLock } from 'react-icons/fa'; // Import icons
-import LoginBack from '../Images/LoginBack.png';
-
+import LoginBack from '../Images/LoginBack.png'; // The image you want to use
+import { useLoginContext } from '../ContextApi/Logincontext';
 const Login = () => {
+  const { login } = useLoginContext(); // Get the login function from the context
+  const [email,setemail] = useState("");
+  const [password,setPassword] = useState("");
+  
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate('/Dashboard');
+    const response = await fetch("http://localhost:3000",{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email, password})
+    })
+    const data = await response.json();
+
+    if(response.status === 200){
+      console.log(data.userdata);
+      login(data);
+      navigate('/Dashboard');
+      
+    }
+    console.log(data);
   };
 
   return (
     <div className="min-h-screen flex items-start justify-center py-8">
-      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex border-2 border-blue-600">
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex border-4 border-blue-600"> {/* Added border class */}
+        {/* Left side of the card with the image */}
         <div className="w-1/2 p-0">
           <img
             src={LoginBack}
@@ -22,26 +41,33 @@ const Login = () => {
           />
         </div>
 
+        {/* Right side of the card with login form */}
         <div className="w-1/2 p-8">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back...</h2>
-            <p className="text-gray-600">Please enter your username and password</p>
+            <p className="text-gray-600">Please enter your email and password</p>
           </div>
           <form onSubmit={handleLogin}>
-            <div className="mb-4 flex items-center border-2 border-gray-300 rounded p-2">
-              <FaUser className="text-gray-600 mr-2" />
+            <div className="mb-4">
               <input
                 type="email"
-                placeholder="Username"
-                className="w-full p-2 outline-none"
+                placeholder="user@gmail.com"
+                className="w-full p-2 border border-gray-300 rounded"
+                onChange={(e)=>{setemail(e.target.value)}}
+                required
+                value={email}
+                autoComplete='true'
+                
               />
             </div>
-            <div className="mb-6 flex items-center border-2 border-gray-300 rounded p-2">
-              <FaLock className="text-gray-600 mr-2" />
+            <div className="mb-6">
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-2 outline-none"
+                className="w-full p-2 border border-gray-300 rounded"
+                onChange={(e)=>{setPassword(e.target.value)}}
+                required
+                value={password}
               />
             </div>
             <p className="text-sm text-gray-600 mb-4">
@@ -59,14 +85,7 @@ const Login = () => {
           </div>
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account yet?{' '}
-              <a
-                href="#"
-                onClick={() => navigate('/Register')}  // Updated to navigate to Register
-                className="text-blue-600"
-              >
-                Create Account
-              </a>
+              Don't have an account yet? <a href="#" className="text-blue-600">Create Account</a>
             </p>
           </div>
         </div>

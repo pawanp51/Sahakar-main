@@ -2,30 +2,11 @@ import React from 'react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Bell } from 'lucide-react';
 import Navbar from './Navbar';
+import { useProjContext } from '../../ContextApi/ProjContext';
 
-const monthlyData = [
-  { name: 'Jan', income: 4000, expense: 2400 },
-  { name: 'Feb', income: 3000, expense: 1398 },
-  { name: 'Mar', income: 2000, expense: 9800 },
-  { name: 'Apr', income: 2780, expense: 3908 },
-  { name: 'May', income: 1890, expense: 4800 },
-  { name: 'Jun', income: 2390, expense: 3800 },
-  { name: 'Jul', income: 3490, expense: 4300 },
-  { name: 'Aug', income: 4000, expense: 2400 },
-  { name: 'Sep', income: 3000, expense: 1398 },
-  { name: 'Oct', income: 2000, expense: 9800 },
-  { name: 'Nov', income: 2780, expense: 3908 },
-  { name: 'Dec', income: 1890, expense: 4800 },
-];
 
-const expenseData = [
-  { name: 'Housing', value: 35 },
-  { name: 'Transportation', value: 20 },
-  { name: 'Food', value: 15 },
-  { name: 'Utilities', value: 10 },
-  { name: 'Insurance', value: 10 },
-  { name: 'Other', value: 10 },
-];
+
+
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
@@ -38,7 +19,7 @@ const Header = () => (
   </header>
 );
 
-const StatCard = ({ label, value, change, color }) => (
+const StatCard = ({ label, value, change, color , graph }) => (
   <div className={`bg-${color}-100 p-4 rounded-lg`}>
     <p className="text-sm text-gray-600">{label}</p>
     <p className="text-2xl font-semibold">${value}</p>
@@ -47,7 +28,7 @@ const StatCard = ({ label, value, change, color }) => (
         {change > 0 ? '↑' : '↓'} {Math.abs(change)}%
       </span>
       <ResponsiveContainer width="50%" height={20}>
-        <LineChart data={monthlyData.slice(-5)}>
+        <LineChart data={graph.slice(-5)}>
           <Line type="monotone" dataKey={label === "Total expense" ? "expense" : "income"} stroke={change > 0 ? "#10B981" : "#EF4444"} strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
@@ -56,6 +37,8 @@ const StatCard = ({ label, value, change, color }) => (
 );
 
 const Expense = () => {
+  const {projectdetails} = useProjContext();
+
   return (
     <div className="flex flex-col bg-gray-100 min-h-screen">
       <Navbar></Navbar>
@@ -64,14 +47,14 @@ const Expense = () => {
         <Header />
         <main className="p-6 overflow-y-auto" style={{height: 'calc(100vh - 64px)'}}>
           <div className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">Navi Mumbai International Airport</h2>
+            <h2 className="text-lg font-semibold mb-2">{projectdetails.projectname}</h2>
             <p className="text-sm text-gray-600">Let's manage & analyse expenditure</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <StatCard label="Total revenue" value="320,000" change={8.5} color="blue" />
-            <StatCard label="Total expense" value="240,000" change={-10.2} color="red" />
-            <StatCard label="Total profit" value="160,000" change={16.4} color="green" />
+            <StatCard label="Total revenue" value={projectdetails.revenue} change={8.5} color="blue" graph={projectdetails.graph} />
+            <StatCard label="Total expense" value={projectdetails.expense} change={-10.2} color="red" graph={projectdetails.graph} />
+            <StatCard label="Total profit" value={projectdetails.profit} change={16.4} color="green" graph={projectdetails.graph} />
           </div>
 
           <div className="bg-white p-4 rounded-lg mb-6">
@@ -93,7 +76,7 @@ const Expense = () => {
               </div>
             </div>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={monthlyData}>
+              <LineChart data={projectdetails.graph}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
@@ -118,42 +101,24 @@ const Expense = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
+               {
+                projectdetails.transaction.map((transaction)=>{
+                  return(
+                    <tr>
                   <td className="py-2 flex items-center">
                     <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
                       <span className="text-green-600 font-bold">U</span>
                     </div>
-                    Land
+                    {transaction.name}
                   </td>
-                  <td>Housing</td>
-                  <td>$150.00</td>
-                  <td>14 Aug, 2023</td>
-                  <td className="text-green-600">Credited</td>
+                  <td>{transaction.type}</td>
+                  <td>${transaction.Amount}</td>
+                  <td>{transaction.Date}</td>
+                  <td className="text-green-600">{transaction.Status}</td>
                 </tr>
-                <tr>
-                  <td className="py-2 flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
-                      <span className="text-red-600 font-bold">N</span>
-                    </div>
-                    Runway
-                  </td>
-                  <td>Roads</td>
-                  <td>$60.00</td>
-                  <td>10 Aug, 2023</td>
-                  <td className="text-red-600">Debited</td>
-                </tr>
-                <tr>
-                  <td className="py-2 flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
-                      <span className="text-green-600 font-bold">S</span>
-                    </div>
-                    Pipelines
-                  </td>
-                  <td>Waters</td>
-                  <td>$10.00</td>
-                  <td>29 July, 2023</td>
-                  <td className="text-red-600">Debited</td>
-                </tr>
+                  )
+                })
+               }
               </tbody>
             </table>
           </div>
@@ -166,51 +131,44 @@ const Expense = () => {
           <button className="text-blue-500">+ Add Resources</button>
         </div>
         <div className="bg-black text-white p-4 rounded-lg mb-6">
-          <p className="text-sm mb-2">Roads & Transport</p>
+          <p className="text-sm mb-2">{projectdetails.mydept}</p>
           <p className="text-lg mb-2">Investment</p>
           <div className="flex justify-between items-center">
-            <p className="text-sm">$423,007</p>
+            <p className="text-sm">{projectdetails.investment}</p>
             <div className="w-8 h-4 bg-white rounded-full"></div>
           </div>
         </div>
 
         <h3 className="text-lg font-semibold mb-4">Saving plan</h3>
         <div className="space-y-4 mb-6">
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center">
-                <span className="mr-2">🚗</span>
-                <p>New Runway</p>
+          {
+            projectdetails.savingplan.map((plan)=>{
+              return(
+                <div>
+                <div className="flex justify-between items-center mb-1">
+                  <div className="flex items-center">
+                    <span className="mr-2"></span>
+                    <p>{plan.name} </p>
+                  </div>
+                  <button>•••</button>
+                </div>
+                <p className="text-sm text-gray-600 mb-1">Target: ${plan.target} </p>
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div className="bg-green-600 h-2.5 rounded-full" style={{ width: '60%' }}></div>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">Saving: ${plan.saving} </p>
               </div>
-              <button>•••</button>
-            </div>
-            <p className="text-sm text-gray-600 mb-1">Target: $20,000</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: '45%' }}></div>
-            </div>
-            <p className="text-sm text-gray-600 mt-1">Saving: $17,563</p>
-          </div>
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <div className="flex items-center">
-                <span className="mr-2">🏠</span>
-                <p>New Terminal</p>
-              </div>
-              <button>•••</button>
-            </div>
-            <p className="text-sm text-gray-600 mb-1">Target: $150,000</p>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div className="bg-green-600 h-2.5 rounded-full" style={{ width: '60%' }}></div>
-            </div>
-            <p className="text-sm text-gray-600 mt-1">Saving: $19,759</p>
-          </div>
+              )
+            })
+          }
+         
         </div>
 
         <h3 className="text-lg font-semibold mb-4">Expense Breakdown</h3>
         <ResponsiveContainer width="100%" height={200}>
           <PieChart>
             <Pie
-              data={expenseData}
+              data={projectdetails.expenseData}
               cx="50%"
               cy="50%"
               innerRadius={60}
@@ -219,7 +177,7 @@ const Expense = () => {
               paddingAngle={5}
               dataKey="value"
             >
-              {expenseData.map((entry, index) => (
+              {projectdetails.expenseData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { AlertCircle, Menu, X } from 'lucide-react'; // Import icons
 import bannerImage from '/Images/Proj_banner.png';
+import { useProjContext } from '../../ContextApi/ProjContext';
+import { useLoginContext } from '../../ContextApi/Logincontext';
 
 const Sidebar = () => {
+  
+
+  
   const [isOpen, setIsOpen] = useState(false); // State to toggle sidebar
   const navigate = useNavigate(); // Initialize navigate
 
@@ -15,6 +20,8 @@ const Sidebar = () => {
     navigate(path); // Navigate to the specified path
   };
 
+
+  
   return (
     <div>
       {/* Hamburger icon for mobile */}
@@ -67,26 +74,26 @@ const Sidebar = () => {
   );
 };
 
-const ProjectList = () => {
+const ProjectList = (prop) => {
   const navigate = useNavigate();
+  const {setprojectdetails} = useProjContext();
+  
+  const handleCategoryClick = (project) => {
+          setprojectdetails(project); 
+          console.log("project:",project);
+          
 
-  const handleCategoryClick = (id) => {
     navigate('/Expense'); // Navigate to ProjectDetails page
   };
 
   return (
     <div className="mt-6">
-      {[ 
-        { id: 6432, name: 'National Gas Infrastructure Development Plan', progress: 100 },
-        { id: 4530, name: 'National Gas Pipeline Expansion Initiative', progress: 64 },
-        { id: 2343, name: 'National Highway Expansion Project', progress: 66 },
-        { id: 1234, name: 'Maharashtra Highway Expansion Project', progress: 38 },
-      ].map((project) => (
+      {prop.project_list.map((project) => (
         <div key={project.id} className="mb-4 bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold">{project.id} - {project.name}</span>
+            <span className="font-semibold">{project.projectid} - {project.projectname}</span>
             <button
-              onClick={() => handleCategoryClick(project.id)}
+              onClick={() => handleCategoryClick(project)}
               className="text-sm bg-blue-600 text-white px-2 py-1 rounded"
             >
               View Project
@@ -103,10 +110,25 @@ const ProjectList = () => {
 };
 
 const Projects = () => {
+  const {user} = useLoginContext();
+  const [project_list, setProjects] = useState([]);
+
+  useEffect(()=>{
+    getprojectlist();
+  },[])
+
+  const getprojectlist = async() =>{
+    const response = await fetch("http://localhost:3000/projects");
+    const data = await response.json();
+    setProjects(data);
+    console.log(user);
+    
+  }
+
   const navigate = useNavigate();
 
   const handleCreateProjectClick = () => {
-    navigate('/CreateProjectForm'); // Navigate to CreateProjectForm page
+    navigate('/CreateProjectForm'); 
   };
 
   return (
@@ -118,19 +140,24 @@ const Projects = () => {
           <div className="flex flex-col md:flex-row justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">Ongoing Projects</h2>
             <div className="flex mt-4 md:mt-0 md:ml-4 gap-4">
-              <button
+            {
+              (user.role===2) && (
+                <button
                 className="px-3 py-1 bg-blue-900 text-white rounded flex items-center mb-2 md:mb-0 md:mr-2"
                 onClick={handleCreateProjectClick} // Handle create project click
               >
                 Create Project
               </button>
+              )
+            }
+             
               <button className="px-3 py-1 bg-blue-900 text-white rounded flex items-center">
                 <AlertCircle className="mr-1" size={16} />
                 Filter
               </button>
             </div>
           </div>
-          <ProjectList />
+          <ProjectList project_list={project_list} />
         </div>
       </main>
     </div>

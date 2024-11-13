@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Search, Filter, Plus } from 'lucide-react';
 import TaskStatus from './TaskStatus'; // Import the TaskStatus component
-
+import { useTaskContext } from '../../ContextApi/TaskContext';
+import { useLoginContext } from '../../ContextApi/Logincontext';
 // RadioInputs component
 const RadioInputs = ({ selected, onChange }) => {
   return (
@@ -46,18 +47,10 @@ const RadioInputs = ({ selected, onChange }) => {
 };
 
 // TaskTable component
-const TaskTable = () => {
+const TaskTable = ({tasks}) => {
+  console.log("tasks are",tasks);
+  
   const navigate = useNavigate(); // Initialize useNavigate
-
-  const tasks = [
-    { id: 'Task ID', name: 'Task Name', date: 'Date', assignedBy: 'Assigned By', department: 'Department', status: 'Status' },
-    { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Alice Johnson', department: 'Inter-department', status: 'Pending' },
-    { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Bob Smith', department: 'Intra-department', status: 'Pending' },
-    { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Charlie Brown', department: 'Inter-department', status: 'Pending' },
-    { id: 'T-12348', name: 'Conduct Team Meeting', date: '09/12/24', assignedBy: 'Dana White', department: 'Intra-department', status: 'Pending' },
-    { id: 'T-12349', name: 'Prepare Presentation', date: '09/11/24', assignedBy: 'Eva Green', department: 'Intra-department', status: 'Pending' },
-  ];
-
   // Function to navigate to CreateTask page
   const handleAddTaskClick = () => {
     navigate('/CreateTask');
@@ -106,20 +99,20 @@ const TaskTable = () => {
             <tbody>
               {tasks.map((task) => (
                 <tr key={task.id} className="border-t">
-                  <td className="px-2 py-2">{task.id}</td>
-                  <td className="px-2 py-2">{task.name}</td>
+                  <td className="px-2 py-2">{task.task_id}</td>
+                  <td className="px-2 py-2">{task.task_name}</td>
                   <td className="px-2 py-2">{task.date}</td>
-                  <td className="px-2 py-2">{task.assignedBy}</td>
+                  <td className="px-2 py-2">{task.assigned_by}</td>
                   <td className="px-2 py-2">{task.department}</td>
                   <td className="px-2 py-2">
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      task.status === 'Status' ? '' : task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                       task.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
                     }`}>
                       {task.status}
                     </span>
                   </td>
                   <td className="px-2 py-2">
-                    {task.status === 'Pending' && (
+                    {task.status === 'pending' && (
                       <button
                         onClick={() => navigate('/Task')}
                         className="px-4 py-2 bg-blue-600 text-white rounded-md"
@@ -151,6 +144,29 @@ const TaskTable = () => {
 
 // TaskManager component
 const TaskManager = () => {
+  
+  const {tasks,settasks} = useTaskContext();
+  const {user} = useLoginContext();
+
+
+  useEffect(()=>{
+      gettasks();
+  },[])
+
+
+  async function gettasks() {
+    const response = await fetch("http://localhost:3000/tasks",{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email:user.Email})
+
+    });
+    const res = await response.json();
+    console.log("response is",res);
+    settasks(res);   
+  }
   const [selected, setSelected] = useState('Pending Tasks');
 
   const handleChange = (event) => {
@@ -162,7 +178,7 @@ const TaskManager = () => {
       <div className="flex justify-center mb-6">
         <RadioInputs selected={selected} onChange={handleChange} />
       </div>
-      {selected === 'Pending Tasks' && <TaskTable />}
+      {selected === 'Pending Tasks' && <TaskTable tasks={tasks}/>}
       {selected === 'Task Status' && <TaskStatus />}
     </div>
   );
