@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 
 const ProjectDetails = () => {
   const [timeRange, setTimeRange] = useState('Last 30 days');
+  const [activeIndex, setActiveIndex] = useState(null);
 
   const summaryData = [
     { name: 'Projects', value: 850, total: 1100, icon: Briefcase, color: '#10B981', change: 10 },
@@ -33,6 +34,14 @@ const ProjectDetails = () => {
     { name: 'In Progress', value: 5, color: '#3B82F6' },
     { name: 'Delayed', value: 4, color: '#F59E0B' },
   ];
+
+  const onPieEnter = (_, index) => {
+    setActiveIndex(index);
+  };
+
+  const onPieLeave = () => {
+    setActiveIndex(null);
+  };
 
   return (
     <div className="min-h-screen bg-white-100">
@@ -108,28 +117,46 @@ const ProjectDetails = () => {
           <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">Overall Progress</h2>
             <div className="flex items-center justify-between">
-              <PieChart width={180} height={180}>
-                <Pie
-                  data={progressBreakdown}
-                  cx={80}
-                  cy={80}
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {progressBreakdown.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
+              <ResponsiveContainer width={200} height={200}>
+                <PieChart>
+                  <Pie
+                    data={progressBreakdown}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                    activeIndex={activeIndex}
+                    onMouseEnter={onPieEnter}
+                    onMouseLeave={onPieLeave}
+                    isAnimationActive={true}
+                    animationDuration={1500}
+                    animationBegin={0}
+                    animationEasing="ease-out"
+                  >
+                    {progressBreakdown.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                        cursor="pointer"
+                        onMouseEnter={() => setActiveIndex(index)}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
               <div className="text-center">
                 <div className="text-4xl font-bold text-blue-600">{overallProgress}%</div>
                 <div className="text-sm text-gray-500">Completed</div>
               </div>
               <div>
-                {progressBreakdown.map((item) => (
-                  <div key={item.name} className="flex items-center mb-1">
+                {progressBreakdown.map((item, index) => (
+                  <div
+                    key={item.name}
+                    className={`flex items-center mb-1 ${activeIndex === index ? 'font-bold text-blue-600' : ''}`}
+                  >
                     <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: item.color }}></div>
                     <span className="text-sm">
                       {item.value} {item.name}
