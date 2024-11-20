@@ -39,6 +39,8 @@ const Sidebar = () => {
           {[
             { name: 'My Profile', path: '/MyProfile' },
             { name: 'Task Management', path: '/TaskManager' },
+            { name: 'DisasterManagement', path: '/DisasterManagement' },
+
             { name: 'Project Directory', path: '/Expense' },
             { name: 'Meeting Scheduling', path: '/Meeting' },
             { name: 'Notifications', path: '/Notifications' },
@@ -51,6 +53,7 @@ const Sidebar = () => {
             { name: 'Staff', path: '/Staff' },
             { name: 'Complaints', path: '/Complaints' },
             { name: 'Office Budget', path: '/OfficeBudget' },
+
           ].map(({ name, path }) => (
             <button
               key={name}
