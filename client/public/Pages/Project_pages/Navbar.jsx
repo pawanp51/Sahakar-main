@@ -20,7 +20,7 @@ const Navbar = () => {
     },
     {
       label: 'Disaster Management',
-      path: '/Disaster Management',
+      path: '/DisasterManagement',
       icon: <FileText className="w-5 h-5 mr-2" />
     },
     {
