@@ -105,7 +105,7 @@ const Task = () => {
           <div className="space-y-8">
             {/* Input Information */}
             <div>
-              <label className="block text-md font-medium text-gray-700 mb-2">INPUT</label>
+              <label className="block text-md font-medium text-gray-700 mb-2"></label>
               <textarea
                 name="information"
                 className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-blue-800 focus:border-blue-800 shadow-inner"
