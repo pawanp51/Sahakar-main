@@ -87,11 +87,11 @@ const TaskTable = () => {
 
   const tasks = [
     // { id: 'Task ID', name: 'Task Name', date: 'Date', assignedBy: 'Assigned By', department: 'Department', status: 'Status' },
-    { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Alice Johnson', department: 'Inter-department', status: 'Pending' },
-    { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Bob Smith', department: 'Intra-department', status: 'Pending' },
-    { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Charlie Brown', department: 'Inter-department', status: 'Pending' },
-    { id: 'T-12348', name: 'Conduct Team Meeting', date: '09/12/24', assignedBy: 'Dana White', department: 'Intra-department', status: 'Pending' },
-    { id: 'T-12349', name: 'Prepare Presentation', date: '09/11/24', assignedBy: 'Eva Green', department: 'Intra-department', status: 'Pending' },
+    { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Rohan Sharma', department: 'Inter-department', status: 'Pending' },
+    { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Arjun Gupta', department: 'Intra-department', status: 'Pending' },
+    { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Vikram Singh', department: 'Inter-department', status: 'Pending' },
+    { id: 'T-12348', name: 'Conduct Team Meeting', date: '09/12/24', assignedBy: 'Neha Patel', department: 'Intra-department', status: 'Pending' },
+    { id: 'T-12349', name: 'Prepare Presentation', date: '09/11/24', assignedBy: 'Ananya Rao', department: 'Intra-department', status: 'Pending' },
   ];
 
   // Function to navigate to CreateTask page
@@ -201,7 +201,7 @@ const TaskManager = () => {
       {selected === 'Pending Tasks' && <TaskTable />}
       {selected === 'Task Status' && <TaskStatus />}
       {selected === 'Approval' && <Approval />}
-      {selected === 'Assigned' && <Assigned/>}
+      {selected === 'Assigned' && <Assigned />}
     </div>
   );
 };
