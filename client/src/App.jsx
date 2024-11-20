@@ -27,6 +27,8 @@ import CreateTask from '../public/Pages/Task_pages/CreateTask.jsx';
 import Expense from '../public/Pages/Project_pages/Expense.jsx';
 import OfficeBudget from '../public/Pages/Project_pages/OfficeBudget.jsx';
 import Staff from '../public/Pages/Staff.jsx';  // Corrected import path
+import DisasterManagement from '../public/Pages/Project_pages/DisasterManagement.jsx';  // Corrected import path
+
 
 import '../src/App.css';
 import ScheduleMeeting from '../public/Components/ScheduleMeeting.jsx';
@@ -66,6 +68,9 @@ const App = () => {
           <Route path="/schedulemeeting" element={<ScheduleMeeting/>} />
           <Route path="/ScheduleMeeting" element={<ScheduleMeeting />} />
           <Route path="/Staff" element={<Staff />} />
+          <Route path="/DisasterManagement" element={<DisasterManagement />} />
+
+          
         </Routes>
       </BrowserRouter>
     </>
