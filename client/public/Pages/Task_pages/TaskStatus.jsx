@@ -5,12 +5,13 @@ import { Search, Filter, Plus } from 'lucide-react';
 // StatusTaskTable component
 const StatusTaskTable = () => {
   const navigate = useNavigate();
+  
   const tasks = [
-    { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Alice Johnson', department: 'Inter-department', status: 'Pending' },
-    { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Bob Smith', department: 'Intra-department', status: 'Declined', reason: 'Technical Issues' },
-    { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Charlie Brown', department: 'Inter-department', status: 'Completed' },
-    { id: 'T-12348', name: 'Conduct Team Meeting', date: '09/12/24', assignedBy: 'Dana White', department: 'Intra-department', status: 'Approved' },
-    { id: 'T-12349', name: 'Prepare Presentation', date: '09/11/24', assignedBy: 'Eva Green', department: 'Intra-department', status: 'Pending' },
+    { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Aisha Sharma', department: 'Inter-department', status: 'Pending' },
+    { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Rahul Mehta', department: 'Intra-department', status: 'Declined', reason: 'Technical Issues' },
+    { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Karan Verma', department: 'Inter-department', status: 'Completed' },
+    { id: 'T-12348', name: 'Conduct Team Meeting', date: '09/12/24', assignedBy: 'Neha Sharma', department: 'Intra-department', status: 'Approved' },
+    { id: 'T-12349', name: 'Prepare Presentation', date: '09/11/24', assignedBy: 'Priya Kapoor', department: 'Intra-department', status: 'Pending' },
   ];
 
   return (
@@ -43,7 +44,7 @@ const StatusTaskTable = () => {
         <div className="overflow-x-auto"> {/* Enable horizontal scroll for tables */}
           <table className="w-full min-w-[600px] table-auto"> {/* Ensure minimum width for table */}
             <thead>
-              <tr className="">
+              <tr>
                 <th className="px-2 py-3">ID</th>
                 <th className="px-2 py-3">Task Name</th>
                 <th className="px-2 py-3">Date</th>
@@ -66,7 +67,7 @@ const StatusTaskTable = () => {
                       task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                       task.status === 'Completed' ? 'bg-green-100 text-green-800' :
                       task.status === 'Declined' ? 'bg-red-800 text-white' :
-                      task.status === 'Approved' ? 'bg-green-500 text-green' :
+                      task.status === 'Approved' ? 'bg-green-500 text-green-800' :
                       'bg-gray-100 text-gray-800' 
                     }`}>
                       {task.status}
