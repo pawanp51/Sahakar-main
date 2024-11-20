@@ -19,7 +19,7 @@ const RadioInputs = ({ selected, onChange }) => {
           className="hidden"
         />
         <span
-          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out ${
+          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out whitespace-nowrap ${
             selected === 'Pending Tasks' ? 'bg-white font-semibold' : 'text-gray-800'
           }`}
         >
@@ -36,7 +36,7 @@ const RadioInputs = ({ selected, onChange }) => {
           className="hidden"
         />
         <span
-          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out ${
+          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out whitespace-nowrap ${
             selected === 'Task Status' ? 'bg-white font-semibold' : 'text-gray-800'
           }`}
         >
@@ -53,7 +53,7 @@ const RadioInputs = ({ selected, onChange }) => {
           className="hidden"
         />
         <span
-          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out ${
+          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out whitespace-nowrap ${
             selected === 'Approval' ? 'bg-white font-semibold' : 'text-gray-800'
           }`}
         >
@@ -70,7 +70,7 @@ const RadioInputs = ({ selected, onChange }) => {
           className="hidden"
         />
         <span
-          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out ${
+          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out whitespace-nowrap ${
             selected === 'Assigned' ? 'bg-white font-semibold' : 'text-gray-800'
           }`}
         >
