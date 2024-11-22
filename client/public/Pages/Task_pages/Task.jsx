@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const Task = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-  const [step, setStep] = useState(1); // Manage the current step
+  const [step, setStep] = useState(1);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -20,77 +20,106 @@ const Task = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle file upload or text submission
     console.log('Submitted Information:', event.target.information.value);
     console.log('Uploaded File:', file);
-    // Instead of navigating away, set step to 3 to show success message
     setStep(3);
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-gray-100 shadow-2xl rounded-lg my-10 border-t-4 border-blue-800">
-      {/* Header */}
-      <div className="flex flex-col justify-center items-center mb-8 border-b pb-4">
-        <h1 className="text-3xl font-bold text-blue-900 text-center">My Tasks</h1>
+    <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-md my-10 border border-gray-300">
+      <header className="mb-8">
+        <div className="flex items-center">
+          <h1 className="text-3xl font-bold text-blue-900">My Tasks</h1>
+        </div>
+        <hr className="mt-4 border-gray-400" />
+      </header>
+
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-blue-900 mb-6">Task Details</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800">
+          <p>
+            <span className="font-semibold">Assigned By:</span> Prasad Mahankal - Head Water Department
+          </p>
+          <p>
+            <span className="font-semibold">Department:</span> Water Department
+          </p>
+          <p>
+            <span className="font-semibold">Date:</span> 17/09/2024
+          </p>
+          <p>
+            <span className="font-semibold">Time:</span> 15:40
+          </p>
+          <p>
+            <span className="font-semibold">Position:</span> Manager
+          </p>
+          <p>
+            <span className="font-semibold">Deadline:</span> <strong>20/09/2024 17:00</strong>
+          </p>
+        </div>
       </div>
 
-      {/* Step 1: Task Details */}
       {step === 1 && (
-        <div>
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Task Details</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Title */}
-              <div className="bg-blue-50 p-6 rounded-lg shadow-md border-l-4 border-blue-600">
-                <h3 className="text-md font-semibold text-blue-700">TITLE</h3>
-                <p className="mt-2 text-gray-900">Permission for Inspection</p>
+        <div className="mb-8">
+          <div className="border border-gray-300 rounded-md p-6 bg-gray-50">
+            <h3 className="text-xl font-bold text-blue-900 mb-4">Task Information</h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-lg font-semibold text-gray-700">Title</h4>
+                <p className="mt-1 text-gray-800">
+                  <strong>Permission for Inspection</strong>
+                </p>
               </div>
 
-              {/* Description */}
-              <div className="bg-green-50 p-6 rounded-lg shadow-md sm:col-span-2 border-l-4 border-green-600">
-                <h3 className="text-md font-semibold text-green-700">DESCRIPTION</h3>
-                <p className="mt-2 text-gray-900">
+              <div>
+                <h4 className="text-lg font-semibold text-gray-700">Description</h4>
+                <p className="mt-1 text-gray-800">
                   Please grant permission for road inspection at Aram Nagar. Also, attach a GIS of the area to avoid infrastructural conflicts.
                 </p>
               </div>
 
-              {/* Date */}
-              <div className="bg-yellow-50 p-6 rounded-lg shadow-md border-l-4 border-yellow-600">
-                <h3 className="text-md font-semibold text-yellow-700">DATE</h3>
-                <p className="mt-2 text-gray-900">17/09/2024</p>
+              <div>
+                <h4 className="text-lg font-semibold text-gray-700">Priority</h4>
+                <p className="mt-1 text-gray-800">
+                  <strong>Medium</strong>
+                </p>
               </div>
 
-              {/* Deadline */}
-              <div className="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-600">
-                <h3 className="text-md font-semibold text-red-700">DEADLINE</h3>
-                <p className="mt-2 text-gray-900">24/09/2024</p>
+              <div>
+                <h4 className="text-lg font-semibold text-gray-700">Files Attached by Manager</h4>
+                <ul className="mt-2 text-gray-800 list-disc list-inside">
+                  <li>
+                    <a href="#" className="text-blue-700 hover:underline font-medium">
+                      Road_Map_Aram_Nagar.pdf
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-blue-700 hover:underline font-medium">
+                      Inspection_Guidelines.docx
+                    </a>
+                  </li>
+                </ul>
               </div>
 
-              {/* Time */}
-              <div className="bg-purple-50 p-6 rounded-lg shadow-md border-l-4 border-purple-600">
-                <h3 className="text-md font-semibold text-purple-700">TIME</h3>
-                <p className="mt-2 text-gray-900">15:40</p>
+              <div>
+                <h4 className="text-lg font-semibold text-gray-700">Additional Notes</h4>
+                <p className="mt-1 text-gray-800">
+                  Ensure to coordinate with the local authorities before the inspection.
+                </p>
               </div>
 
-              {/* Assigned By */}
-              <div className="bg-pink-50 p-6 rounded-lg shadow-md sm:col-span-2 border-l-4 border-pink-600">
-                <h3 className="text-md font-semibold text-pink-700">ASSIGNED BY</h3>
-                <p className="mt-2 text-gray-900">Prasad Mahankal - Head Water Department</p>
-              </div>
-
-              {/* Priority */}
-              <div className="bg-teal-50 p-6 rounded-lg shadow-md border-l-4 border-teal-600">
-                <h3 className="text-md font-semibold text-teal-700">PRIORITY</h3>
-                <p className="mt-2 text-gray-900">Medium</p>
+              <div>
+                <h4 className="text-lg font-semibold text-gray-700">References</h4>
+                <p className="mt-1 text-gray-800">
+                  Refer to the previous inspection reports for Aram Nagar dated 01/05/2024.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-end">
+          <div className="flex justify-end mt-6">
             <button
               onClick={handleNext}
-              className="px-8 py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-transform transform hover:scale-105 shadow-md"
+              className="px-6 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition"
             >
               Next
             </button>
@@ -98,50 +127,52 @@ const Task = () => {
         </div>
       )}
 
-      {/* Step 2: Task Submission */}
       {step === 2 && (
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Submit Task Information</h2>
-          <div className="space-y-8">
-            {/* Input Information */}
-            <div>
-              <label className="block text-md font-medium text-gray-700 mb-2"></label>
-              <textarea
-                name="information"
-                className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-blue-800 focus:border-blue-800 shadow-inner"
-                placeholder="Enter additional information here..."
-                required
-              ></textarea>
-            </div>
+        <form onSubmit={handleSubmit} className="mb-8">
+          <div className="border border-gray-300 rounded-md p-6 bg-gray-50">
+            <h3 className="text-xl font-bold text-blue-900 mb-4">Submit Your Response</h3>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-lg font-semibold text-gray-700 mb-2">
+                  Additional Information
+                </label>
+                <textarea
+                  name="information"
+                  className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  placeholder="Enter your notes here..."
+                  required
+                ></textarea>
+              </div>
 
-            {/* File Upload */}
-            <div className="p-6 border border-dashed border-gray-400 rounded-lg bg-white shadow-sm flex flex-col items-center">
-              <label className="block text-md font-medium text-gray-700 mb-3">UPLOAD DOCUMENTS</label>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-800 focus:border-blue-800"
-                accept=".pdf, .doc, .docx, .ppt, .xls, .xlsx, .jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .mkv"
-                required
-              />
-              <p className="text-sm text-gray-500 mt-3">
-                All formats supported: PDF, Word, PPT, Excel, Images, Videos, GIS, etc.
-              </p>
+              <div className="border border-dashed border-gray-400 rounded-md p-6 bg-white">
+                <label className="block text-lg font-semibold text-gray-700 mb-3">
+                  Upload Documents
+                </label>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  accept=".pdf, .doc, .docx, .jpg, .jpeg, .png"
+                  required
+                />
+                <p className="text-sm text-gray-600 mt-2">
+                  Supported formats: PDF, Word, Images.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="mt-10 flex justify-between">
+          <div className="mt-6 flex justify-between">
             <button
               type="button"
               onClick={handleCancel}
-              className="px-6 py-3 text-sm text-red-600 hover:text-red-800 border border-red-600 rounded-lg transition-transform transform hover:scale-105 shadow-md"
+              className="px-6 py-2 text-gray-700 border border-gray-700 rounded-md hover:bg-gray-200 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-3 text-sm text-white bg-blue-800 rounded-lg hover:bg-blue-900 transition-transform transform hover:scale-105 shadow-md"
+              className="px-6 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition"
             >
               Submit
             </button>
@@ -149,21 +180,18 @@ const Task = () => {
         </form>
       )}
 
-      {/* Step 3: Submission Success */}
       {step === 3 && (
-        <div className="bg-white p-8 rounded-lg shadow-md text-center">
-          <h2 className="text-2xl font-semibold text-green-700 mb-4">Submission Successful!</h2>
-          <p className="text-gray-700 mb-6">
-            Your task information has been successfully submitted. Thank you!
+        <div className="text-center p-8 bg-gray-50 border border-gray-300 rounded-md">
+          <h3 className="text-2xl font-bold text-green-700 mb-4">Submission Successful!</h3>
+          <p className="text-gray-800 mb-6">
+            Your response has been submitted successfully.
           </p>
-          <div className="flex justify-center">
-            <button
-              onClick={() => navigate('/TaskManager')}
-              className="px-6 py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-transform transform hover:scale-105 shadow-md"
-            >
-              Go to Task Manager
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/TaskManager')}
+            className="px-6 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-800 transition"
+          >
+            Back to Task Manager
+          </button>
         </div>
       )}
     </div>
