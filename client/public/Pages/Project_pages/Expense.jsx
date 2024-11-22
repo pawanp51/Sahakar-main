@@ -226,10 +226,9 @@ const Expense = () => {
             </PieChart>
           </ResponsiveContainer>
 
-          <h3 className="text-lg font-semibold my-4">Quick Transfer</h3>
+          <h3 className="text-lg font-semibold my-4">Quick Audit</h3>
           <div className="flex space-x-2">
-            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">+</div>
-            {['J', 'A', 'N', 'H'].map((initial, index) => (
+            {['D', 'O', 'N', 'E'].map((initial, index) => (
               <div key={index} className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
                 {initial}
               </div>

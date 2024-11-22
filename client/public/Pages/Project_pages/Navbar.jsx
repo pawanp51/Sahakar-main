@@ -9,18 +9,18 @@ const Navbar = () => {
 
   const navItems = [
     {
-      label: 'Dashboard',
+      label: 'Expense',
       path: '/Expense',
       icon: <LayoutDashboard className="w-5 h-5 mr-2" />
     },
     {
-      label: 'Project Details',
-      path: '/ProjectDetails',
+      label: 'Project Analysis',
+      path: '/ProjectAnalysis',
       icon: <FileText className="w-5 h-5 mr-2" />
     },
     {
-      label: 'Reports',
-      path: '/reports',
+      label: 'Project Details',
+      path: '/ProjectDetails',
       icon: <PieChart className="w-5 h-5 mr-2" />
     }
   ];
