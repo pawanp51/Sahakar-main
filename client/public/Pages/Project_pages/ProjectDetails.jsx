@@ -3,6 +3,14 @@ import Navbar from './Navbar';
 
 const ProjectDetails = () => {
 
+  const onPieEnter = (_, index) => {
+    setActiveIndex(index);
+  };
+
+  const onPieLeave = () => {
+    setActiveIndex(null);
+  };
+
   return (
     <div className="min-h-screen bg-white-100">
       <Navbar></Navbar>

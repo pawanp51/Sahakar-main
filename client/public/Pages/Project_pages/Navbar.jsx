@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FileText, PieChart, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileText, PieChart, ChevronLeft, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -21,8 +21,12 @@ const Navbar = () => {
     {
       label: 'Project Details',
       path: '/ProjectDetails',
-      icon: <PieChart className="w-5 h-5 mr-2" />
     }
+    // {
+    //   label: 'Disaster Management',
+    //   path: '/DisasterManagement',
+    //   icon: <FileText className="w-5 h-5 mr-2" />
+    // }
   ];
 
   const handleBack = () => {
@@ -66,8 +70,7 @@ const Navbar = () => {
           <div className="flex-shrink-0">
             <button
               className="inline-flex items-center py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            > 
-            </button>
+            />
           </div>
 
           {/* Mobile menu button */}

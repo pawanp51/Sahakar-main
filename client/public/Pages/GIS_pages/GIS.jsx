@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import markerIconPng from 'leaflet/dist/images/marker-icon.png';
@@ -14,43 +14,21 @@ const customMarkerIcon = new L.Icon({
   shadowSize: [32, 32],
 });
 
-// const MapClickHandler = ({ selectedPoints, setSelectedPoints, lines, setLines }) => {
-//   useMapEvents({
-//     click(e) {
-//       const { lat, lng } = e.latlng;
-
-//       if (selectedPoints.length < 2) {
-//         setSelectedPoints([...selectedPoints, [lat, lng]]);
-//       }
-
-//       if (selectedPoints.length === 1) {
-//         setLines([...lines, [...selectedPoints, [lat, lng]]]);
-//         setSelectedPoints([]);
-//       }
-//     },
-//   });
-
-//   return null;
-// };
-
 const Geotagging = () => {
   const [projectLocations, setProjectLocations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [lat, setLat] = useState('');
   const [lng, setLng] = useState('');
-  // const [selectedPoints, setSelectedPoints] = useState([]);
-  // const [lines, setLines] = useState([]);
 
-  // Predefined project locations for Pune
   const predefinedProjects = [
-    { name: 'Gas Pipeline Project', coordinates: [18.5204, 73.8567] }, // Example coordinates for Pune
+    { name: 'Gas Pipeline Project', coordinates: [18.5204, 73.8567] },
     { name: 'Road Construction', coordinates: [18.529, 73.844] },
     { name: 'Water Pipeline', coordinates: [18.51, 73.86] },
     { name: 'School Renovation', coordinates: [18.530, 73.865] },
   ];
 
-  // Load predefined projects on initial load
   useEffect(() => {
     setProjectLocations(predefinedProjects);
   }, []);
@@ -70,17 +48,30 @@ const Geotagging = () => {
     }
   };
 
+  const handleDeleteProject = (indexToDelete) => {
+    setProjectLocations(projectLocations.filter((_, index) => index !== indexToDelete));
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4 relative">
-      <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-8 mb-4">
-        <h1 className="text-2xl font-bold mb-4">Geo Tagging System</h1>
+      <div className={`max-w-6xl w-full bg-white shadow-md rounded-lg p-8 mb-4 ${isFullscreen ? 'hidden' : ''}`}>
+        <h1 className="text-2xl font-bold mb-4 text-center">Geo Tagging System</h1>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="mb-4 bg-blue-500 text-white py-2 px-4 rounded-md"
-        >
-          Add New Project
-        </button>
+        {/* Buttons: Add New Project and Zoom to Fullscreen */}
+        <div className="flex justify-center gap-4 mb-4">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-500 text-white py-2 px-4 rounded-md"
+          >
+            Add New Project
+          </button>
+          <button
+            onClick={() => setIsFullscreen(true)}
+            className="bg-green-500 text-white py-2 px-4 rounded-md"
+          >
+            Zoom to Fullscreen
+          </button>
+        </div>
 
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -149,26 +140,77 @@ const Geotagging = () => {
           </div>
         )}
 
-        <div className="relative z-10">
+        <div className="grid grid-cols-5 gap-4">
+          {/* Map View - 60% */}
+          <div className="col-span-3 relative z-10 h-96 w-full bg-white rounded-md shadow-md">
+            <MapContainer
+              center={[18.5204, 73.8567]}
+              zoom={13}
+              className="h-full w-full rounded-md"
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+              />
+              {projectLocations.map((project, index) => (
+                <Marker
+                  key={index}
+                  position={project.coordinates}
+                  icon={customMarkerIcon}
+                >
+                  <Popup>
+                    <span>{project.name}</span>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
+
+          {/* Project List View - 40% */}
+          <div className="col-span-2 bg-white rounded-md shadow-md h-96 overflow-hidden">
+            {/* Fixed Header */}
+            <div className="bg-white z-10 border-b p-6">
+              <h1 className="text-2xl font-bold">Project List</h1>
+            </div>
+            {/* Scrollable List */}
+            <div className="overflow-y-auto h-full">
+              <ul className="space-y-4 p-6">
+                {projectLocations.map((project, index) => (
+                  <li
+                    key={index}
+                    className="border p-4 rounded-md flex justify-between items-center"
+                  >
+                    <div>
+                      <p className="font-bold text-lg">{project.name}</p>
+                      <p>Latitude: {project.coordinates[0]}</p>
+                      <p>Longitude: {project.coordinates[1]}</p>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteProject(index)}
+                      className="bg-red-500 text-white py-1 px-3 rounded-md"
+                    >
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Fullscreen Map */}
+      {isFullscreen && (
+        <div className="fixed inset-0 z-50 bg-white">
           <MapContainer
-            center={[18.5204, 73.8567]} // Pune coordinates
+            center={[18.5204, 73.8567]}
             zoom={13}
-            className="h-96 w-full rounded-md"
-            style={{ zIndex: 1 }} // Make sure the map has proper z-index
+            className="h-full w-full"
           >
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
             />
-
-            {/* <MapClickHandler
-              selectedPoints={selectedPoints}
-              setSelectedPoints={setSelectedPoints}
-              lines={lines}
-              setLines={setLines}
-            /> */}
-
-            {/* Project Markers */}
             {projectLocations.map((project, index) => (
               <Marker
                 key={index}
@@ -180,14 +222,16 @@ const Geotagging = () => {
                 </Popup>
               </Marker>
             ))}
-
-            {/* Polylines between points */}
-            {/* {lines.map((line, index) => (
-              <Polyline key={index} positions={line} color="blue" />
-            ))} */}
           </MapContainer>
+          {/* Always visible Back Button */}
+          <button
+            onClick={() => setIsFullscreen(false)}
+            className="fixed top-4 right-4 bg-red-500 text-white py-2 px-4 rounded-md z-50"
+          >
+            Back
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 };
