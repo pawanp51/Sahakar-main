@@ -37,7 +37,7 @@ const StatusTaskTable = () => {
               onClick={() => navigate('/CreateTask')}
             >
               <Plus size={20} className="mr-2" />
-              Add Task
+              Assign Task
             </button>
           </div>
         </div>

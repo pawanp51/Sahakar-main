@@ -4,14 +4,10 @@ import { useNavigate } from 'react-router-dom';
 const Task = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-  const [step, setStep] = useState(1); // Manage the current step
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
-  };
-
-  const handleNext = () => {
-    setStep(2);
   };
 
   const handleCancel = () => {
@@ -20,152 +16,167 @@ const Task = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle file upload or text submission
-    console.log('Submitted Information:', event.target.information.value);
-    console.log('Uploaded File:', file);
-    // Instead of navigating away, set step to 3 to show success message
-    setStep(3);
+    setShowSuccess(true);
   };
 
-  return (
-    <div className="max-w-3xl mx-auto p-8 bg-gray-100 shadow-2xl rounded-lg my-10 border-t-4 border-blue-800">
-      {/* Header */}
-      <div className="flex flex-col justify-center items-center mb-8 border-b pb-4">
-        <h1 className="text-3xl font-bold text-blue-900 text-center">My Tasks</h1>
-      </div>
-
-      {/* Step 1: Task Details */}
-      {step === 1 && (
-        <div>
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Task Details</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Title */}
-              <div className="bg-blue-50 p-6 rounded-lg shadow-md border-l-4 border-blue-600">
-                <h3 className="text-md font-semibold text-blue-700">TITLE</h3>
-                <p className="mt-2 text-gray-900">Permission for Inspection</p>
-              </div>
-
-              {/* Description */}
-              <div className="bg-green-50 p-6 rounded-lg shadow-md sm:col-span-2 border-l-4 border-green-600">
-                <h3 className="text-md font-semibold text-green-700">DESCRIPTION</h3>
-                <p className="mt-2 text-gray-900">
-                  Please grant permission for road inspection at Aram Nagar. Also, attach a GIS of the area to avoid infrastructural conflicts.
-                </p>
-              </div>
-
-              {/* Date */}
-              <div className="bg-yellow-50 p-6 rounded-lg shadow-md border-l-4 border-yellow-600">
-                <h3 className="text-md font-semibold text-yellow-700">DATE</h3>
-                <p className="mt-2 text-gray-900">17/09/2024</p>
-              </div>
-
-              {/* Deadline */}
-              <div className="bg-red-50 p-6 rounded-lg shadow-md border-l-4 border-red-600">
-                <h3 className="text-md font-semibold text-red-700">DEADLINE</h3>
-                <p className="mt-2 text-gray-900">24/09/2024</p>
-              </div>
-
-              {/* Time */}
-              <div className="bg-purple-50 p-6 rounded-lg shadow-md border-l-4 border-purple-600">
-                <h3 className="text-md font-semibold text-purple-700">TIME</h3>
-                <p className="mt-2 text-gray-900">15:40</p>
-              </div>
-
-              {/* Assigned By */}
-              <div className="bg-pink-50 p-6 rounded-lg shadow-md sm:col-span-2 border-l-4 border-pink-600">
-                <h3 className="text-md font-semibold text-pink-700">ASSIGNED BY</h3>
-                <p className="mt-2 text-gray-900">Prasad Mahankal - Head Water Department</p>
-              </div>
-
-              {/* Priority */}
-              <div className="bg-teal-50 p-6 rounded-lg shadow-md border-l-4 border-teal-600">
-                <h3 className="text-md font-semibold text-teal-700">PRIORITY</h3>
-                <p className="mt-2 text-gray-900">Medium</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-end">
-            <button
-              onClick={handleNext}
-              className="px-8 py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-transform transform hover:scale-105 shadow-md"
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Task Submission */}
-      {step === 2 && (
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Submit Task Information</h2>
-          <div className="space-y-8">
-            {/* Input Information */}
-            <div>
-              <label className="block text-md font-medium text-gray-700 mb-2"></label>
-              <textarea
-                name="information"
-                className="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-blue-800 focus:border-blue-800 shadow-inner"
-                placeholder="Enter additional information here..."
-                required
-              ></textarea>
-            </div>
-
-            {/* File Upload */}
-            <div className="p-6 border border-dashed border-gray-400 rounded-lg bg-white shadow-sm flex flex-col items-center">
-              <label className="block text-md font-medium text-gray-700 mb-3">UPLOAD DOCUMENTS</label>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-800 focus:border-blue-800"
-                accept=".pdf, .doc, .docx, .ppt, .xls, .xlsx, .jpg, .jpeg, .png, .gif, .mp4, .avi, .mov, .mkv"
-                required
-              />
-              <p className="text-sm text-gray-500 mt-3">
-                All formats supported: PDF, Word, PPT, Excel, Images, Videos, GIS, etc.
-              </p>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="mt-10 flex justify-between">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-6 py-3 text-sm text-red-600 hover:text-red-800 border border-red-600 rounded-lg transition-transform transform hover:scale-105 shadow-md"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-3 text-sm text-white bg-blue-800 rounded-lg hover:bg-blue-900 transition-transform transform hover:scale-105 shadow-md"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Step 3: Submission Success */}
-      {step === 3 && (
-        <div className="bg-white p-8 rounded-lg shadow-md text-center">
-          <h2 className="text-2xl font-semibold text-green-700 mb-4">Submission Successful!</h2>
-          <p className="text-gray-700 mb-6">
-            Your task information has been successfully submitted. Thank you!
-          </p>
-          <div className="flex justify-center">
+  if (showSuccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="bg-white shadow rounded-lg p-6 text-center">
+            <svg className="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <h2 className="mt-4 text-lg font-medium text-gray-900">Response Submitted Successfully</h2>
+            <p className="mt-2 text-gray-500">Your response has been recorded and will be reviewed shortly.</p>
             <button
               onClick={() => navigate('/TaskManager')}
-              className="px-6 py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-transform transform hover:scale-105 shadow-md"
+              className="mt-6 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
-              Go to Task Manager
+              Return to Task Manager
             </button>
           </div>
         </div>
-      )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Task Header */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <div className="border-b pb-4">
+              <h1 className="text-2xl font-semibold text-gray-900">Permission for Inspection</h1>
+              <p className="text-sm text-gray-500 mt-1">Task ID: #TK-2024-091</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Assigned By</h3>
+                <p className="mt-1 text-gray-900">Prasad Mahankal</p>
+                <p className="text-sm text-gray-500">Head Water Department</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Date & Time</h3>
+                <p className="mt-1 text-gray-900">17/09/2024</p>
+                <p className="text-sm text-gray-500">15:40</p>
+              </div>
+              <div className="md:col-span-1">
+                <h3 className="text-sm font-medium text-gray-500">Priority</h3>
+                <p className="mt-1 text-lg font-medium text-gray-900">Medium</p>
+                <div className="h-1 w-1/4 bg-yellow-500 mt-2 rounded"></div>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Deadline</h3>
+                <p className="mt-1 text-gray-900">24/09/2024</p>
+                <p className="text-sm text-gray-500">7 days remaining</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Task Details */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 mb-4">Task Details</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Description</h3>
+                <p className="mt-1 text-gray-900">Please grant permission for road inspection at Aram Nagar. Also, attach a GIS of the area to avoid infrastructural conflicts.</p>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Files Attached by Manager</h3>
+                <div className="mt-2 border rounded-lg divide-y">
+                  <div className="p-3 flex items-center">
+                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <span className="ml-2 text-sm text-gray-900">Area_Map.pdf</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">Additional Notes</h3>
+                <p className="mt-1 text-gray-900">Please ensure all safety protocols are followed during the inspection.</p>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-medium text-gray-500">References</h3>
+                <p className="mt-1 text-gray-900">Previous inspection report (2023) - Document #INS-2023-45</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Response Section */}
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Your Response</h2>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Response Details</label>
+                <textarea
+                  name="information"
+                  rows="4"
+                  className="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-gray-500 focus:border-gray-500"
+                  placeholder="Enter your detailed response..."
+                  required
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Additional Notes</label>
+                <textarea
+                  name="notes"
+                  rows="2"
+                  className="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-gray-500 focus:border-gray-500"
+                  placeholder="Any additional notes or comments..."
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Attach Files</label>
+                <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-6">
+                  <div className="text-center">
+                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <div className="mt-4 flex text-sm text-gray-600 justify-center">
+                      <label className="relative cursor-pointer bg-white rounded-md font-medium text-gray-900 hover:text-gray-500">
+                        <span>Upload files</span>
+                        <input 
+                          type="file"
+                          onChange={handleFileChange}
+                          className="sr-only"
+                          multiple
+                        />
+                      </label>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs text-gray-500">All formats supported</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between pt-4">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  Submit Response
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -122,7 +122,7 @@ const TaskTable = () => {
               onClick={handleAddTaskClick} // Navigate to CreateTask on click
             >
               <Plus size={20} className="mr-2" />
-              Add Task
+              Assign Task
             </button>
           </div>
         </div>
