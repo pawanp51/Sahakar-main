@@ -7,28 +7,47 @@ const departments = {
     type: "Reports, Letters, Maintenance Schedules, Compliance Documents",
     description:
       "An office memorandum is an internal document written to inform employees of policy, procedures, announcements, or instructions.",
-    letter: `Subject: Internal Office Policy Update
+    letter: `[Government of India Letterhead/Department Letterhead]
+[Address of the issuing office]
+[Date: DD/MM/YYYY]
+Office Order No: [Order Number, if applicable]
+
+To,
+[Recipient Name]
+[Recipient’s Designation]
+[Recipient's Department/Office]
+[Address]
+
+Subject: Internal Office Policy Update
 
 Dear [Recipient],
 
 This memorandum serves as a notification regarding [Policy/Procedure]. Please be advised that the following changes will take effect immediately.
 
-1. [Change 1]
-2. [Change 2]
-3. [Change 3]
+First, [Change 1]. Second, [Change 2]. Finally, [Change 3]. We request all concerned individuals to take note of these changes and act accordingly.
 
-We request all concerned individuals to take note of these changes and act accordingly. For any further clarification, please contact [Department Name].
+For any further clarification, please contact [Department Name]. We appreciate your prompt compliance with these changes.
 
-Sincerely,
+Yours sincerely,
 [Your Name]
-[Your Title]`
+[Your Designation]
+[Department Name/Ministry Name]`
   },
   fire: {
     title: "Office Order",
     type: "Incident Reports, Emergency Response Guidelines, Safety Regulations",
     description: "An office order is used for issuing specific instructions or assignments to individuals or departments.",
-    letter: `Office Order No. [Order Number]
-    
+    letter: `[Government of India Letterhead/Department Letterhead]
+[Address of the issuing office]
+[Date: DD/MM/YYYY]
+Office Order No: [Order Number, if applicable]
+
+To,
+[Recipient Name]
+[Recipient’s Designation]
+[Recipient's Department/Office]
+[Address]
+
 Subject: [Subject of the Office Order]
 
 Dear [Recipient],
@@ -40,17 +59,26 @@ The following orders are issued with immediate effect:
 
 All concerned are directed to comply with the above instructions without delay. Please ensure that these orders are followed meticulously to maintain the safety and integrity of operations.
 
-By Order,
+Thank you for your cooperation in this matter.
+
+Yours sincerely,
 [Your Name]
-[Your Title]`
+[Your Designation]
+[Department Name/Ministry Name]`
   },
   earth: {
     title: "Demand for Grant",
     type: "Budget Requests, Financial Allocation",
     description: "A demand for grant is a formal request for the allocation of government funds for specific purposes.",
-    letter: `To,
+    letter: `[Government of India Letterhead/Department Letterhead]
+[Address of the issuing office]
+[Date: DD/MM/YYYY]
+Office Order No: [Order Number, if applicable]
+
+To,
 The Financial Secretary,
 [Government Department]
+[Address]
 
 Subject: Demand for Grant for [Purpose]
 
@@ -61,17 +89,27 @@ In accordance with the financial rules, I am requesting a grant of [Amount] for 
 1. [Itemized Cost 1]
 2. [Itemized Cost 2]
 
-It is kindly requested that this application be given priority consideration so that we can ensure timely execution of the intended project.
+It is kindly requested that this application be given priority consideration so that we can ensure timely execution of the intended project. Your support in this matter is greatly appreciated.
 
-Sincerely,
+Yours sincerely,
 [Your Name]
-[Your Title]`
+[Your Designation]
+[Department Name/Ministry Name]`
   },
   air: {
     title: "Notice",
     type: "Public Announcements, Circulars, Alerts",
     description: "A notice is used for informing the public or specific departments about important updates or actions.",
-    letter: `NOTICE
+    letter: `[Government of India Letterhead/Department Letterhead]
+[Address of the issuing office]
+[Date: DD/MM/YYYY]
+Office Order No: [Order Number, if applicable]
+
+To,
+[Recipient Name]
+[Recipient’s Designation]
+[Recipient's Department/Office]
+[Address]
 
 Subject: [Subject of the Notice]
 
@@ -84,15 +122,25 @@ This is to inform all concerned that [Notice Details]. The following actions are
 
 For further information or clarification, please contact [Contact Information]. We appreciate your prompt attention to this matter.
 
-Issued by,
+Yours sincerely,
 [Your Name]
-[Your Title]`
+[Your Designation]
+[Department Name/Ministry Name]`
   },
   forest: {
     title: "Circular",
     type: "Internal Communication, Policy Updates",
     description: "A circular is an internal communication document used to disseminate information within an organization.",
-    letter: `CIRCULAR
+    letter: `[Government of India Letterhead/Department Letterhead]
+[Address of the issuing office]
+[Date: DD/MM/YYYY]
+Office Order No: [Order Number, if applicable]
+
+To,
+[Recipient Name]
+[Recipient’s Designation]
+[Recipient's Department/Office]
+[Address]
 
 Subject: [Subject of the Circular]
 
@@ -103,19 +151,27 @@ It is hereby informed that [Details of the Information]. The relevant guidelines
 1. [Instruction 1]
 2. [Instruction 2]
 
-Please ensure compliance with the above guidelines. If you have any questions, feel free to reach out for clarification.
+Please ensure compliance with the above guidelines. If you have any questions, feel free to reach out for clarification. Your adherence to these instructions is crucial for smooth operations.
 
-Sincerely,
+Yours sincerely,
 [Your Name]
-[Your Title]`
+[Your Designation]
+[Department Name/Ministry Name]`
   },
   health: {
     title: "Notification",
     type: "Government Orders, Official Announcements",
     description: "A notification is a formal announcement issued by a government body regarding rules, regulations, or decisions.",
-    letter: `GOVERNMENT OF [STATE]
+    letter: `[Government of India Letterhead/Department Letterhead]
+[Address of the issuing office]
+[Date: DD/MM/YYYY]
+Office Order No: [Order Number, if applicable]
 
-NOTIFICATION
+To,
+[Recipient Name]
+[Recipient’s Designation]
+[Recipient's Department/Office]
+[Address]
 
 Subject: [Subject of the Notification]
 
@@ -126,11 +182,12 @@ In exercise of the powers conferred under [Relevant Law], the government hereby 
 1. [Notification Detail 1]
 2. [Notification Detail 2]
 
-This notification takes effect from [Date]. Please ensure that the information provided is disseminated and followed accordingly.
+This notification takes effect from [Date]. Please ensure that the information provided is disseminated and followed accordingly. We appreciate your cooperation in adhering to these regulations.
 
-By order of the Government,
+Yours sincerely,
 [Your Name]
-[Your Title]`
+[Your Designation]
+[Department Name/Ministry Name]`
   }
 };
 
@@ -167,7 +224,13 @@ const Templates = () => {
         letter = letter.replace(`[${key}]`, placeholderValues[key]);
       });
 
-      doc.text(letter, 10, 30);
+      const lines = letter.split('\n');
+      let y = 30;
+      lines.forEach((line) => {
+        doc.text(line, 10, y);
+        y += 10;
+      });
+
       doc.save(`${selectedDepartment.title}.pdf`);
     }
   };
@@ -213,7 +276,6 @@ const Templates = () => {
             <p className="text-sm text-gray-600 mb-2">{selectedDepartment.type}</p>
             <p className="text-gray-800 mb-6">{selectedDepartment.description}</p>
 
-            {/* Split inputs into two columns */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {selectedDepartment.letter.match(/\[(.*?)\]/g)?.map((placeholder, index) => (
                 <div key={index} className="mb-4">
@@ -229,14 +291,17 @@ const Templates = () => {
               ))}
             </div>
 
-            {/* Scrollable Content Container */}
             <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-sm font-mono mb-10 text-gray-800 h-[30vh] w-[100vh] overflow-auto">
               {Object.keys(placeholderValues).length > 0
                 ? Object.keys(placeholderValues).reduce(
                     (acc, key) => acc.replace(`[${key}]`, placeholderValues[key]),
                     selectedDepartment.letter
                   )
-                : selectedDepartment.letter}
+                : selectedDepartment.letter.split('\n').map((line, index) => (
+                    <p key={index} className="mb-2">
+                      {line}
+                    </p>
+                  ))}
             </div>
 
             <div className="flex justify-end space-x-4">
@@ -254,8 +319,6 @@ const Templates = () => {
               </button>
             </div>
           </div>
-       
-
         </div>
       )}
     </div>

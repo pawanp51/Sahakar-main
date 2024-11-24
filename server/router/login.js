@@ -12,7 +12,9 @@ loginrouter.route("/").post(async (req, res) => {
 
         if (user) {
             if (user.password === password) {
-                const token = jwt.sign({email: user.Email ,role:user.role},JWT_SECRET, { expiresIn: '1h' });
+                // console.log(user);
+                
+                const token = jwt.sign({user},JWT_SECRET, { expiresIn: '3h' });
                 // res.header('auth-token', token).send(token);
                 res.status(200).json({msg:"login success", userdata:user , token:token});
             } else {
@@ -26,5 +28,21 @@ loginrouter.route("/").post(async (req, res) => {
         res.status(500).json("Server error");
     }
 });
+
+loginrouter.route("/checklogin").post(async(req, res) => {
+    // console.log("here");
+    
+    const { token } = req.body;
+    // decode token 
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        if(err) {
+            res.status(401).json({msg:"Invalid token"});
+        } else {
+            console.log(decoded);
+            
+            res.status(200).json({msg:"Token is valid", userdata:decoded});
+        }
+    });    
+})
 
 module.exports = loginrouter;

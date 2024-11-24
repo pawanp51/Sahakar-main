@@ -25,14 +25,16 @@ import TopBanner from '../public/Components/TopBanner.jsx';
 import Discussion from '../public/Pages/Discussion.jsx';
 import CreateTask from '../public/Pages/Task_pages/CreateTask.jsx';
 import Expense from '../public/Pages/Project_pages/Expense.jsx';
+import OfficeBudget from '../public/Pages/Project_pages/OfficeBudget.jsx';
 import Staff from '../public/Pages/Staff.jsx';  // Corrected import path
 
 import '../src/App.css';
+import ScheduleMeeting from '../public/Components/ScheduleMeeting.jsx';
 
 const App = () => {
   return (
     <>
-      <BrowserRouter>
+      
         <TopBanner />
         <Routes>
           <Route path="/" element={<Login />} />
@@ -44,6 +46,8 @@ const App = () => {
           <Route path="/Geotagging" element={<Geotagging />} />
           <Route path="/Complaints" element={<Complaints />} />
           <Route path="/Expense" element={<Expense />} />
+          <Route path="/OfficeBudget" element={<OfficeBudget />} />
+          <Route path="/OfficeBudget" element={<OfficeBudget />} />
           <Route path="/Projects" element={<Projects />} />
           <Route path="/CreateProjectForm" element={<CreateProjectForm />} />
           <Route path="/MyProfile" element={<MyProfile />} />
@@ -59,9 +63,11 @@ const App = () => {
           <Route path="/Inc_req" element={<Inc_req />} />
           <Route path="/Out_req" element={<Out_req />} />
           <Route path="/Discussion" element={<Discussion />} />
+          <Route path="/schedulemeeting" element={<ScheduleMeeting/>} />
+          <Route path="/ScheduleMeeting" element={<ScheduleMeeting />} />
           <Route path="/Staff" element={<Staff />} />
         </Routes>
-      </BrowserRouter>
+      
     </>
   );
 };

@@ -9,7 +9,7 @@ export const useTaskContext = () => useContext(TaskContext);
 
 // Create Context Provider
 export const TaskProvider = ({ children }) => {
-    const [tasks,settasks] = useState();
+    const [tasks,settasks] = useState([]);
     // Define your state and functions here
   
     return (

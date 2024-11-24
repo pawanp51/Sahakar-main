@@ -6,7 +6,6 @@ import { Search, Filter, Plus } from 'lucide-react';
 const StatusTaskTable = () => {
   const navigate = useNavigate();
   const tasks = [
-    { id: 'Task ID', name: 'Task Name', date: 'Date', assignedBy: 'Assigned By', department: 'Department', status: 'Status' },
     { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Alice Johnson', department: 'Inter-department', status: 'Pending' },
     { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Bob Smith', department: 'Intra-department', status: 'Pending' },
     { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Charlie Brown', department: 'Inter-department', status: 'Completed' },
@@ -43,15 +42,15 @@ const StatusTaskTable = () => {
         </div>
         <div className="overflow-x-auto"> {/* Enable horizontal scroll for tables */}
           <table className="w-full min-w-[600px] table-auto"> {/* Ensure minimum width for table */}
-            <thead>
-              <tr className="text-left bg-gray-200">
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2">Task Name</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Assigned By</th>
-                <th className="px-4 py-2">Department</th>
-                <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Action</th>
+          <thead>
+              <tr className="">
+                <th className="px-2 py-3">ID</th>
+                <th className="px-2 py-3">Task Name</th>
+                <th className="px-2 py-3">Date</th>
+                <th className="px-2 py-3">Assigned By</th>
+                <th className="px-2 py-3">Department</th>
+                <th className="px-2 py-3">Status</th>
+                <th className="px-2 py-3">Action</th>
               </tr>
             </thead>
             <tbody>

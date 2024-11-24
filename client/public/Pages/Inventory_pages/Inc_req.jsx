@@ -92,7 +92,7 @@ const Inc_req = () => {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="table-auto w-full text-left bg-white shadow-md rounded-lg border border-gray-300">
+        <table className="table-auto w-full bg-white shadow-md rounded-lg border border-gray-300">
           <thead className="bg-gradient-to-r from-blue-700 to-blue-900 text-white">
             <tr className="h-16">
               <th className="px-4 py-2 text-center">Resource Name</th>

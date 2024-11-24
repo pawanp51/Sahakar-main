@@ -56,7 +56,6 @@ const Sidebar = () => {
             { name: 'Inventory', path: '/Inventory' },
             { name: 'Templates', path: '/Templates' },
             { name: 'Staff', path: '/Staff' },
-            { name: 'Lead', path: '/Lead' },
             { name: 'Complaints', path: '/Complaints' },
             { name: 'Office Budget', path: '/OfficeBudget' },
           ].map(({ name, path }) => (
@@ -81,15 +80,13 @@ const ProjectList = (prop) => {
   const handleCategoryClick = (project) => {
           setprojectdetails(project); 
           console.log("project:",project);
-          
-
     navigate('/Expense'); // Navigate to ProjectDetails page
   };
 
   return (
     <div className="mt-6">
       {prop.project_list.map((project) => (
-        <div key={project.id} className="mb-4 bg-white p-4 rounded-lg shadow">
+        <div key={project.projectid} className="mb-4 bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-2">
             <span className="font-semibold">{project.projectid} - {project.projectname}</span>
             <button
@@ -109,20 +106,22 @@ const ProjectList = (prop) => {
   );
 };
 
-const Projects = () => {
-  const {user} = useLoginContext();
+const Projects =  () => {
+  const {user,checklogin} =  useLoginContext();
   const [project_list, setProjects] = useState([]);
 
   useEffect(()=>{
-    getprojectlist();
-  },[])
+    if(!user){
+      checklogin();
+    }else{
+      getprojectlist();
+    }
+  },[user])
 
   const getprojectlist = async() =>{
     const response = await fetch("http://localhost:3000/projects");
     const data = await response.json();
     setProjects(data);
-    console.log(user);
-    
   }
 
   const navigate = useNavigate();
@@ -131,6 +130,8 @@ const Projects = () => {
     navigate('/CreateProjectForm'); 
   };
 
+  
+  if(!user) return (<p>Loading..</p>)
   return (
     <div className="flex flex-col md:flex-row bg-gray-100 min-h-screen">
       <Sidebar />

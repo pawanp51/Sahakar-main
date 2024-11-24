@@ -4,6 +4,8 @@ import { Search, Filter, Plus } from 'lucide-react';
 import TaskStatus from './TaskStatus'; // Import the TaskStatus component
 import { useTaskContext } from '../../ContextApi/TaskContext';
 import { useLoginContext } from '../../ContextApi/Logincontext';
+import Approval from './Approval';
+
 // RadioInputs component
 const RadioInputs = ({ selected, onChange }) => {
   return (
@@ -42,13 +44,30 @@ const RadioInputs = ({ selected, onChange }) => {
           Task Status
         </span>
       </label>
+      <label className="flex-1 text-center">
+        <input
+          type="radio"
+          name="radio"
+          value="Approval"
+          checked={selected === 'Approval'}
+          onChange={onChange}
+          className="hidden"
+        />
+        <span
+          className={`flex cursor-pointer items-center justify-center rounded-lg py-2 px-4 transition-all duration-150 ease-in-out ${
+            selected === 'Approval' ? 'bg-white font-semibold' : 'text-gray-800'
+          }`}
+        >
+          Approval Requests
+        </span>
+      </label>
     </div>
   );
 };
 
 // TaskTable component
 const TaskTable = ({tasks}) => {
-  console.log("tasks are",tasks);
+  // console.log("tasks are",tasks);
   
   const navigate = useNavigate(); // Initialize useNavigate
   // Function to navigate to CreateTask page
@@ -86,7 +105,7 @@ const TaskTable = ({tasks}) => {
         <div className="overflow-x-auto"> {/* Enable horizontal scroll */}
           <table className="w-full table-auto min-w-[800px]"> {/* Ensure minimum width */}
             <thead>
-              <tr className="text-left">
+              <tr className="">
                 <th className="px-2 py-3">ID</th>
                 <th className="px-2 py-3">Task Name</th>
                 <th className="px-2 py-3">Date</th>
@@ -144,17 +163,37 @@ const TaskTable = ({tasks}) => {
 
 // TaskManager component
 const TaskManager = () => {
-  
   const {tasks,settasks} = useTaskContext();
-  const {user} = useLoginContext();
+  const {user , checklogin} = useLoginContext();
+  const [loading,setloading] = useState(false);
+  useEffect(() => {
+
+    const fetchUserAndTasks = async () => {
+      setloading(true); // Show loading state while fetching data
+      if (!user) {
+        await checklogin(); // Ensure user is set
+      }
+      if (user) {
+        await gettasks(); // Fetch tasks after user is available
+      }
+      setloading(false); // Hide loading state after fetching data
+    };
+  
+    fetchUserAndTasks();
+  }, [user]);
+  
 
 
-  useEffect(()=>{
-      gettasks();
-  },[])
 
 
   async function gettasks() {
+
+    if(!user) return;
+      
+      console.log("gettasks");
+      console.log("in gettask user is",user);
+      
+      
     const response = await fetch("http://localhost:3000/tasks",{
       method: 'POST',
       headers: {
@@ -173,13 +212,20 @@ const TaskManager = () => {
     setSelected(event.target.value);
   };
 
+  if(loading){
+    return <p>loading..</p>;
+
+  } 
+
   return (
-    <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-6">
       <div className="flex justify-center mb-6">
         <RadioInputs selected={selected} onChange={handleChange} />
       </div>
-      {selected === 'Pending Tasks' && <TaskTable tasks={tasks}/>}
+     
+      {selected === 'Pending Tasks'   && <TaskTable tasks={tasks}/>}
       {selected === 'Task Status' && <TaskStatus />}
+      {selected === 'Approval' && <Approval />}
     </div>
   );
 };

@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Calendar = () => {
+  const navigate = useNavigate();
   const [meetings, setMeetings] = useState({
-    "2024-09-16": [{ time: "10:00 AM", title: "Department Meeting", description: "Meeting with the department manager." }],
-    "2024-09-17": [{ time: "1:00 PM", title: "Project Review", description: "Review of project progress." }],
-    "2024-09-19": [{ time: "9:00 AM", title: "Preparation", description: "Preparation for upcoming project phases." }],
+    "2024-09-16": [{ time: "10:00 AM", title: "Department Meeting", description: "Meeting with the department manager.", link: "https://example.com" }],
+    "2024-09-17": [{ time: "01:00 PM", title: "Project Review", description: "Review of project progress.", link: "https://example.com" }],
+    "2024-09-19": [{ time: "09:00 AM", title: "Preparation", description: "Preparation for upcoming project phases.", link: "https://example.com" }],
   });
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null); // Track selected date for modal
-  const [newMeeting, setNewMeeting] = useState({ title: '', description: '' });
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [newMeeting, setNewMeeting] = useState({ title: '', description: '', link: '' });
   const [timeSelection, setTimeSelection] = useState({ hour: '', minute: '', period: 'AM' });
-  const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
   const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
@@ -33,7 +35,7 @@ const Calendar = () => {
   const openModal = (date) => {
     setSelectedDate(date);
     setIsModalOpen(true);
-    setNewMeeting({ title: '', description: '' });
+    setNewMeeting({ title: '', description: '', link: '' });
     setTimeSelection({ hour: '', minute: '', period: 'AM' });
   };
 
@@ -44,11 +46,20 @@ const Calendar = () => {
         ...prevMeetings,
         [selectedDate]: [
           ...(prevMeetings[selectedDate] || []),
-          { time: formattedTime, title: newMeeting.title, description: newMeeting.description }
+          { 
+            time: formattedTime, 
+            title: newMeeting.title, 
+            description: newMeeting.description, 
+            link: newMeeting.link 
+          }
         ],
       }));
-      setIsModalOpen(false); // Close modal after saving
+      setIsModalOpen(false);
     }
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false); // Close modal without saving
   };
 
   const renderDays = () => {
@@ -56,10 +67,10 @@ const Calendar = () => {
     const startDayOfWeek = startOfMonth.getDay();
     let days = [];
 
-    for (let i = startDayOfWeek - 1; i >= 0; i--) {
+    for (let i = 1; i <= startDayOfWeek; i++) {
       days.push(
         <div key={`prev-${i}`} className="border p-2 h-20 flex items-center justify-center text-gray-400 rounded-2xl">
-          {daysInPrevMonth - i}
+          {daysInPrevMonth - i + 1}
         </div>
       );
     }
@@ -125,7 +136,15 @@ const Calendar = () => {
 
       {/* Scheduled Meetings Side */}
       <div className="w-1/2 border p-4 rounded-2xl shadow">
-        <h2 className="text-lg font-bold mb-4">Scheduled Meetings</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl text-center mb-4">Meeting Schedule</h1>
+          <button 
+            onClick={() => navigate('/schedulemeeting')} 
+            className="bg-green-500 text-white px-4 py-2 rounded-2xl"
+          >
+            Create Meeting
+          </button>
+        </div>
         <div>
           {Object.keys(meetings).map((date, index) => (
             <div key={index} className="mb-4">
@@ -135,6 +154,9 @@ const Calendar = () => {
                   <span className="block font-bold">{meeting.time}</span>
                   <span>{meeting.title}</span>
                   <p>{meeting.description}</p>
+                  {meeting.link && (
+                    <a href={meeting.link} className="text-blue-500 text-xs mt-1 block">Meeting Link</a>
+                  )}
                 </div>
               ))}
             </div>
@@ -160,42 +182,47 @@ const Calendar = () => {
               onChange={(e) => setNewMeeting({ ...newMeeting, description: e.target.value })}
               className="border p-2 rounded w-full mb-2"
             />
-            <div className="flex space-x-2 mb-2">
+            <input
+              type="text"
+              placeholder="Meeting Link (optional)"
+              value={newMeeting.link}
+              onChange={(e) => setNewMeeting({ ...newMeeting, link: e.target.value })}
+              className="border p-2 rounded w-full mb-2"
+            />
+            <div className="flex mb-4">
               <select
                 value={timeSelection.hour}
                 onChange={(e) => setTimeSelection({ ...timeSelection, hour: e.target.value })}
-                className="border p-1 rounded w-1/3"
+                className="border p-2 rounded mr-2 w-1/3"
               >
                 <option value="">Hour</option>
-                {Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0')).map((h) => (
-                  <option key={h} value={h}>{h}</option>
+                {Array.from({ length: 13 }, (_, i) => i).map((hour) => (
+                  <option key={hour} value={hour}>{hour}</option>
                 ))}
               </select>
               <select
                 value={timeSelection.minute}
                 onChange={(e) => setTimeSelection({ ...timeSelection, minute: e.target.value })}
-                className="border p-1 rounded w-1/3"
+                className="border p-2 rounded mr-2 w-1/3"
               >
                 <option value="">Minute</option>
-                {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((m) => (
-                  <option key={m} value={m}>{m}</option>
+                {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                  <option key={minute} value={minute}>{minute}</option>
                 ))}
               </select>
               <select
                 value={timeSelection.period}
                 onChange={(e) => setTimeSelection({ ...timeSelection, period: e.target.value })}
-                className="border p-1 rounded w-1/3"
+                className="border p-2 rounded w-1/3"
               >
                 <option value="AM">AM</option>
                 <option value="PM">PM</option>
               </select>
             </div>
-            <button onClick={handleSaveMeeting} className="bg-blue-500 text-white px-3 py-1 rounded w-full mb-2">
-              Save Meeting
-            </button>
-            <button onClick={() => setIsModalOpen(false)} className="text-gray-500 text-sm underline w-full text-center">
-              Cancel
-            </button>
+            <div className="flex justify-between">
+              <button onClick={handleCancel} className="bg-gray-400 text-white px-4 py-2 rounded-2xl">Cancel</button>
+              <button onClick={handleSaveMeeting} className="bg-blue-500 text-white px-4 py-2 rounded-2xl">Save</button>
+            </div>
           </div>
         </div>
       )}

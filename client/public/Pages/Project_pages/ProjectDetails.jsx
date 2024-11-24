@@ -50,7 +50,7 @@ const ProjectDetails = () => {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="text-left text-sm text-gray-500">
+                  <tr className="text-sm text-gray-500">
                     <th className="pb-2">Project Name</th>
                     <th className="pb-2">Status</th>
                     <th className="pb-2">Progress</th>
@@ -83,7 +83,7 @@ const ProjectDetails = () => {
           <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">Overall Progress</h2>
             <div className="flex items-center justify-between">
-              <PieChart width={160} height={160}>
+              <PieChart width={180} height={180}>
                 <Pie
                   data={projectdetails.progressBreakdown}
                   cx={80}
@@ -121,7 +121,7 @@ const ProjectDetails = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-sm text-gray-500">
+                <tr className="text-sm text-gray-500">
                   <th className="pb-2">Milestone</th>
                   <th className="pb-2">Status</th>
                   <th className="pb-2">Progress</th>
