@@ -225,20 +225,6 @@ export default function ScheduleMeeting() {
         </div>
 
         <div>
-          <label htmlFor="documents" className="block text-xl font-medium mb-2">
-            Attach Documents:
-          </label>
-          <input
-            type="file"
-            id="documents"
-            name="documents"
-            onChange={handleFileChange}
-            multiple
-            className="w-full p-3 border rounded-md text-lg"
-          />
-        </div>
-
-        <div>
           <label htmlFor="location" className="block text-xl font-medium mb-2">Location:</label>
           <select
             id="location"
