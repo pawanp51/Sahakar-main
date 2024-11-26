@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "jspdf": "^2.5.2",
-    "lucide-react": "^0.441.0"
+    "lucide-react": "^0.441.0",
+    "react-feather": "^2.0.10"
   }
 }
