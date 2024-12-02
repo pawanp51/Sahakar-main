@@ -57,7 +57,6 @@ Dear [Recipient],
 The following orders are issued with immediate effect:
 
 1. [Order Details]
-2. [Order Details]
 
 All concerned are directed to comply with the above instructions without delay. Please ensure that these orders are followed meticulously to maintain the safety and integrity of operations.
 
@@ -264,6 +263,16 @@ const Templates = () => {
     }
   };
 
+  const handlePrint = () => {
+    if (selectedDepartment) {
+      const formattedLetter = formatTemplate(selectedDepartment.letter);
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`<pre>${formattedLetter}</pre>`);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  };
+
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen p-6">
       <div className="max-w-screen-lg mx-auto py-8">
@@ -330,6 +339,12 @@ const Templates = () => {
                 className="bg-gray-300 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-400 transition"
               >
                 Back
+              </button>
+              <button
+                onClick={handlePrint}
+                className="bg-blue-500 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-600 transition"
+              >
+                Print
               </button>
               <button
                 onClick={generatePDF}
