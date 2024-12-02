@@ -6,8 +6,11 @@ export default {
     "./public/**/*.{html,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      overflow: {
+        hidden: 'hidden', // Adds a custom utility class for `overflow: hidden`
+      },
+    },
   },
   plugins: [],
 }
-
