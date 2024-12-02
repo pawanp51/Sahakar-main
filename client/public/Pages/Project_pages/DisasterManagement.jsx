@@ -397,7 +397,7 @@ const Header = () => (
 
 // StatCard Component
 const StatCard = ({ label, value, change, color }) => (
-  <div className="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+  <div className="bg-white p-6 rounded-lg shadow-md ">
     <p className="text-sm font-medium text-gray-500">{label}</p>
     <p className="text-3xl font-semibold text-gray-800 mt-2">₹{value}</p>
     <div className="flex items-center mt-4">
@@ -435,10 +435,10 @@ const DisasterManagement = () => {
   };
 
   return (
-    <div className="flex flex-col bg-gray-50 min-h-screen">
+    <div className="flex flex-col bg-gray-50 min-h-screen overflow-x-hidden ">
       {/* Navbar */}
       <Header />
-
+  
       <div className="flex flex-1">
         <div className="flex-1 h-full overflow-y-auto">
           <main className="p-6">
@@ -446,25 +446,27 @@ const DisasterManagement = () => {
             {!selectedProject && (
               <div>
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">Ongoing Projects</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ">
                   {projects.map((project) => (
                     <div
                       key={project.id}
-                      className="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+                      className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between min-h-[250px] transform transition-transform duration-300 hover:scale-105"
                     >
-                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                        {project.name}
-                      </h2>
-                      <div className="w-full bg-gray-200 rounded-full h-3 my-4">
-                        <div
-                          className="bg-green-500 h-3 rounded-full"
-                          style={{ width: `${project.progress}%` }}
-                        ></div>
+                      <div>
+                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                          {project.name}
+                        </h2>
+                        <div className="w-full bg-gray-200 rounded-full h-3 my-4">
+                          <div
+                            className="bg-green-500 h-3 rounded-full"
+                            style={{ width: `${project.progress}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-gray-500">{project.progress}% Complete</p>
                       </div>
-                      <p className="text-sm text-gray-500">{project.progress}% Complete</p>
                       <button
                         onClick={() => handleViewProject(project)}
-                        className="mt-4 w-full bg-blue-800 text-white py-2 rounded hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105"
+                        className="mt-4 w-full bg-blue-800 text-white py-2 rounded hover:bg-blue-700"
                       >
                         View Project
                       </button>
@@ -489,7 +491,7 @@ const DisasterManagement = () => {
                   </div>
                   <button
                     onClick={handleBackToProjects}
-                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition-colors duration-300 transform hover:scale-105"
+                    className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 "
                   >
                     Back to Projects
                   </button>
@@ -518,7 +520,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Monthly Financial Insights */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-xl font-semibold text-gray-800">
                       Monthly Financial Insights
@@ -564,7 +566,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Pie Charts Side by Side */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     Disaster and Expense Breakdown
                   </h3>
@@ -658,7 +660,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Transaction History */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     Transaction History
                   </h3>
@@ -699,10 +701,10 @@ const DisasterManagement = () => {
                 {/* Department and Saving Plans */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   {/* My Department */}
-                  <div className="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+                  <div className="bg-white p-6 rounded-lg shadow-md ">
                     <div className="flex justify-between items-center mb-6">
                       <h3 className="text-xl font-semibold text-gray-800">My Department</h3>
-                      <button className="text-blue-600 hover:underline transform hover:scale-105 transition-transform duration-300">
+                      <button className="text-blue-600 hover:underline transform ">
                         + Add Resources
                       </button>
                     </div>
@@ -710,7 +712,7 @@ const DisasterManagement = () => {
                       {departments.map((dept) => (
                         <div
                           key={dept.id}
-                          className="p-4 rounded-lg border border-blue-500 bg-blue-50 transform transition-transform duration-300 hover:scale-105"
+                          className="p-4 rounded-lg border border-blue-500 bg-blue-50"
                         >
                           <p className="text-sm font-medium text-blue-600">{dept.name}</p>
                           <p className="text-lg font-semibold text-blue-800 mt-2">{dept.type}</p>
@@ -721,7 +723,7 @@ const DisasterManagement = () => {
                   </div>
 
                   {/* Saving Plan */}
-                  <div className="bg-white p-6 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+                  <div className="bg-white p-6 rounded-lg shadow-md ">
                     <h3 className="text-xl font-semibold mb-6 text-gray-800">Saving Plan</h3>
                     <div className="space-y-6">
                       {savingPlans.map((plan) => (
@@ -731,7 +733,7 @@ const DisasterManagement = () => {
                               <span className="mr-3 text-xl">{plan.icon}</span>
                               <p className="font-medium text-gray-800">{plan.name}</p>
                             </div>
-                            <button className="text-gray-500 hover:text-gray-700 transform hover:scale-105 transition-transform duration-300">
+                            <button className="text-gray-500 hover:text-gray-700 ">
                               •••
                             </button>
                           </div>
@@ -755,7 +757,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Disaster Impact Summary */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     Disaster Impact Summary
                   </h3>
@@ -797,7 +799,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Recovery Progress */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     Recovery Progress
                   </h3>
@@ -817,7 +819,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Resource Allocation Post-Disaster */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     Resource Allocation Post-Disaster
                   </h3>
@@ -853,7 +855,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Community Support Metrics */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     Community Support Metrics
                   </h3>
@@ -874,7 +876,7 @@ const DisasterManagement = () => {
                 </div>
 
                 {/* Notifications */}
-                <div className="bg-white p-6 rounded-lg mb-8 shadow-md transform transition-transform duration-300 hover:scale-105">
+                <div className="bg-white p-6 rounded-lg mb-8 shadow-md ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">Notifications</h3>
                   <ul className="space-y-4">
                     {notifications.map((note) => (
@@ -882,8 +884,8 @@ const DisasterManagement = () => {
                         key={note.id}
                         className={`p-4 rounded-lg ${
                           note.type === "alert"
-                            ? "bg-red-100 text-red-700 transform hover:scale-105 transition-transform duration-300"
-                            : "bg-blue-100 text-blue-700 transform hover:scale-105 transition-transform duration-300"
+                            ? "bg-red-100 text-red-700 "
+                            : "bg-blue-100 text-blue-700 "
                         }`}
                       >
                         {note.message}
