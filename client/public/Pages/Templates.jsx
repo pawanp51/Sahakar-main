@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
+import { saveAs } from 'file-saver';
 
 const departments = {
   water: {
@@ -212,18 +214,22 @@ const Templates = () => {
     }));
   };
 
+  const formatTemplate = (template) => {
+    let formatted = template;
+    Object.keys(placeholderValues).forEach((key) => {
+      formatted = formatted.replace(`[${key}]`, placeholderValues[key]);
+    });
+    return formatted;
+  };
+
   const generatePDF = () => {
     if (selectedDepartment) {
       const doc = new jsPDF();
       doc.setFontSize(16);
       doc.text(selectedDepartment.title, 10, 20);
       doc.setFontSize(12);
-      let letter = selectedDepartment.letter;
 
-      Object.keys(placeholderValues).forEach((key) => {
-        letter = letter.replace(`[${key}]`, placeholderValues[key]);
-      });
-
+      const letter = formatTemplate(selectedDepartment.letter);
       const lines = letter.split('\n');
       let y = 30;
       lines.forEach((line) => {
@@ -232,6 +238,29 @@ const Templates = () => {
       });
 
       doc.save(`${selectedDepartment.title}.pdf`);
+    }
+  };
+
+  const generateDOCX = () => {
+    if (selectedDepartment) {
+      const formattedLetter = formatTemplate(selectedDepartment.letter);
+      const paragraphs = formattedLetter.split('\n').map((line) =>
+        new Paragraph({
+          children: [new TextRun({ text: line, break: 1 })],
+        })
+      );
+
+      const doc = new Document({
+        sections: [
+          {
+            children: paragraphs,
+          },
+        ],
+      });
+
+      Packer.toBlob(doc).then((blob) => {
+        saveAs(blob, `${selectedDepartment.title}.docx`);
+      });
     }
   };
 
@@ -291,17 +320,8 @@ const Templates = () => {
               ))}
             </div>
 
-            <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-sm font-mono mb-10 text-gray-800 h-[30vh] w-[100vh] overflow-auto">
-              {Object.keys(placeholderValues).length > 0
-                ? Object.keys(placeholderValues).reduce(
-                    (acc, key) => acc.replace(`[${key}]`, placeholderValues[key]),
-                    selectedDepartment.letter
-                  )
-                : selectedDepartment.letter.split('\n').map((line, index) => (
-                    <p key={index} className="mb-2">
-                      {line}
-                    </p>
-                  ))}
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-sm font-mono mb-10 text-gray-800 whitespace-pre-wrap overflow-auto">
+              {formatTemplate(selectedDepartment.letter)}
             </div>
 
             <div className="flex justify-end space-x-4">
@@ -316,6 +336,12 @@ const Templates = () => {
                 className="bg-green-700 text-white px-6 py-2 rounded-md font-semibold hover:bg-green-800 transition"
               >
                 Download PDF
+              </button>
+              <button
+                onClick={generateDOCX}
+                className="bg-blue-700 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-800 transition"
+              >
+                Download DOCX
               </button>
             </div>
           </div>
