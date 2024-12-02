@@ -266,12 +266,66 @@ const Templates = () => {
   const handlePrint = () => {
     if (selectedDepartment) {
       const formattedLetter = formatTemplate(selectedDepartment.letter);
+  
       const printWindow = window.open('', '_blank');
-      printWindow.document.write(`<pre>${formattedLetter}</pre>`);
+  
+      printWindow.document.write(`
+        <html>
+          <head>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                font-size: 12pt;
+                margin: 1.5cm;
+              }
+              h1 {
+                font-size: 16pt;
+                text-align: center;
+                margin-bottom: 20px;
+              }
+              h2, h3 {
+                font-size: 14pt;
+                margin-bottom: 10px;
+              }
+              .content {
+                font-size: 12pt;
+                line-height: 1.5;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                margin-top: 20px;
+              }
+              .signature {
+                margin-top: 40px;
+                font-size: 12pt;
+              }
+              pre {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${selectedDepartment.title}</h1>
+            <div class="content">
+              <pre>${formattedLetter}</pre>
+            </div>
+            <div class="signature">
+            </div>
+          </body>
+        </html>
+      `);
+  
       printWindow.document.close();
-      printWindow.print();
+  
+      printWindow.onload = () => {
+        printWindow.print();
+        printWindow.onafterprint = () => {
+          printWindow.close();
+        };
+      };
     }
   };
+  
 
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen p-6">
