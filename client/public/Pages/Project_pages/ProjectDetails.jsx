@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Briefcase, CheckSquare, Users, Clock } from 'lucide-react';
 import Navbar from './Navbar';
 import { useProjContext } from '../../ContextApi/ProjContext';
 
 const ProjectDetails = () => {
+  const onPieEnter = (_, index) => {
+    setActiveIndex(index);
+  };
 
+  const onPieLeave = () => {
+    setActiveIndex(null);
+  };
   const [timeRange, setTimeRange] = useState('Last 30 days');
   const {projectdetails} = useProjContext();
 
@@ -209,21 +213,6 @@ const ProjectDetails = () => {
       </div>
     </div>
   );
-};
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'Completed':
-      return 'bg-green-100 text-green-800';
-    case 'On Track':
-      return 'bg-blue-100 text-blue-800';
-    case 'Delayed':
-      return 'bg-yellow-100 text-yellow-800';
-    case 'At Risk':
-      return 'bg-red-100 text-red-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-  }
 };
 
 export default ProjectDetails;

@@ -1,17 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Plus } from 'lucide-react';
-
+import { useLoginContext } from '../../ContextApi/Logincontext';
 // StatusTaskTable component
-const StatusTaskTable = () => {
+const StatusTaskTable = ({tasks}) => {
   const navigate = useNavigate();
-  const tasks = [
-    { id: 'T-12345', name: 'Complete Report', date: '09/15/24', assignedBy: 'Alice Johnson', department: 'Inter-department', status: 'Pending' },
-    { id: 'T-12346', name: 'Update Website', date: '09/14/24', assignedBy: 'Bob Smith', department: 'Intra-department', status: 'Pending' },
-    { id: 'T-12347', name: 'Design Marketing Materials', date: '09/13/24', assignedBy: 'Charlie Brown', department: 'Inter-department', status: 'Completed' },
-    { id: 'T-12348', name: 'Conduct Team Meeting', date: '09/12/24', assignedBy: 'Dana White', department: 'Intra-department', status: 'Requested' },
-    { id: 'T-12349', name: 'Prepare Presentation', date: '09/11/24', assignedBy: 'Eva Green', department: 'Intra-department', status: 'Pending' },
-  ];
+  const { user } = useLoginContext();
+const task_status = tasks.filter((task)=>{return task.employee_email === user.Email});
+console.log(tasks);
 
   return (
     <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
@@ -36,14 +32,14 @@ const StatusTaskTable = () => {
               onClick={() => navigate('/CreateTask')}
             >
               <Plus size={20} className="mr-2" />
-              Add Task
+              Assign Task
             </button>
           </div>
         </div>
         <div className="overflow-x-auto"> {/* Enable horizontal scroll for tables */}
           <table className="w-full min-w-[600px] table-auto"> {/* Ensure minimum width for table */}
-          <thead>
-              <tr className="">
+            <thead>
+              <tr>
                 <th className="px-2 py-3">ID</th>
                 <th className="px-2 py-3">Task Name</th>
                 <th className="px-2 py-3">Date</th>
@@ -63,23 +59,28 @@ const StatusTaskTable = () => {
                   <td className="px-4 py-2">{task.department}</td>
                   <td className="px-4 py-2">
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      task.status === 'Status' ? '' :
                       task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                       task.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
+                      task.status === 'Declined' ? 'bg-red-800 text-white' :
+                      task.status === 'Approved' ? 'bg-green-500 text-green-800' :
+                      'bg-gray-100 text-gray-800' 
                     }`}>
                       {task.status}
                     </span>
                   </td>
                   <td className="px-4 py-2">
-                    {task.status === 'Pending' && (
+                    {task.status === 'Declined' ? (
+                      <div className="text-red-500 text-sm">
+                        <p>Reason: {task.reason}</p>
+                      </div>
+                    ) : task.status === 'Pending' ? (
                       <button
                         onClick={() => navigate('/Task')}
                         className="px-4 py-2 bg-blue-600 text-white rounded-md"
                       >
                         Complete Task
                       </button>
-                    )}
+                    ) : null}
                   </td>
                 </tr>
               ))}

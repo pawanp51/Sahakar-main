@@ -16,6 +16,7 @@ import Templates from '../public/Pages/Templates.jsx';
 import Task from '../public/Pages/Task_pages/Task.jsx';
 import TaskStatus from '../public/Pages/Task_pages/TaskStatus.jsx';
 import ProjectDetails from '../public/Pages/Project_pages/ProjectDetails.jsx';
+import ProjectAnalysis from '../public/Pages/Project_pages/ProjectAnalysis.jsx';
 import Seminar from '../public/Pages/Seminar.jsx';
 import PendingTasks from '../public/Pages/Task_pages/PendingTasks.jsx';
 import MyInventory from '../public/Pages/Inventory_pages/MyInventory.jsx';
@@ -27,6 +28,8 @@ import CreateTask from '../public/Pages/Task_pages/CreateTask.jsx';
 import Expense from '../public/Pages/Project_pages/Expense.jsx';
 import OfficeBudget from '../public/Pages/Project_pages/OfficeBudget.jsx';
 import Staff from '../public/Pages/Staff.jsx';  // Corrected import path
+import DisasterManagement from '../public/Pages/Project_pages/DisasterManagement.jsx';  // Corrected import path
+
 
 import '../src/App.css';
 import ScheduleMeeting from '../public/Components/ScheduleMeeting.jsx';
@@ -59,6 +62,7 @@ const App = () => {
           <Route path="/PendingTasks" element={<PendingTasks />} />
           <Route path="/TaskStatus" element={<TaskStatus />} />
           <Route path="/ProjectDetails" element={<ProjectDetails />} />
+          <Route path="/ProjectAnalysis" element={<ProjectAnalysis />} />
           <Route path="/MyInventory" element={<MyInventory />} />
           <Route path="/Inc_req" element={<Inc_req />} />
           <Route path="/Out_req" element={<Out_req />} />
@@ -66,6 +70,9 @@ const App = () => {
           <Route path="/schedulemeeting" element={<ScheduleMeeting/>} />
           <Route path="/ScheduleMeeting" element={<ScheduleMeeting />} />
           <Route path="/Staff" element={<Staff />} />
+          <Route path="/DisasterManagement" element={<DisasterManagement />} />
+
+          
         </Routes>
       
     </>

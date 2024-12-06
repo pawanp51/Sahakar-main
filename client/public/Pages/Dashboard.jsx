@@ -6,10 +6,10 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6 mt-8">
         {/* GIS Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Geotagging')}
         >
@@ -24,7 +24,7 @@ const Dashboard = () => {
 
         {/* Geo Tagging Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/GIS')}
         >
@@ -39,7 +39,7 @@ const Dashboard = () => {
 
         {/* Projects Directory Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Projects')}
         >
@@ -54,7 +54,7 @@ const Dashboard = () => {
 
         {/* Meeting Scheduling Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Meeting')}
         >
@@ -69,7 +69,7 @@ const Dashboard = () => {
 
         {/* Task Manager Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Taskmanager')}
         >
@@ -84,7 +84,7 @@ const Dashboard = () => {
 
         {/* Seminars and Workshops Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Seminar')}
         >
@@ -99,7 +99,7 @@ const Dashboard = () => {
 
         {/* Discussions Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Discussion')}
         >
@@ -114,7 +114,7 @@ const Dashboard = () => {
 
         {/* Inventory Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Inventory')}
         >
@@ -129,7 +129,7 @@ const Dashboard = () => {
 
         {/* Templates Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Templates')}
         >
@@ -144,7 +144,7 @@ const Dashboard = () => {
 
         {/* Complaints Card */}
         <div
-          className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
+          className="relative w-full h-64 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
           onClick={() => navigate('/Complaints')}
         >

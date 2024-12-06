@@ -1,18 +1,83 @@
-import React, { useState ,useMemo} from 'react';
+import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import { useLoginContext } from '../../ContextApi/Logincontext';
 
-const Approval = ({tasks}) => {
-  const {user} = useLoginContext();
-  const [requests, setRequests] = useState([]);
-
-  useMemo(()=>{
-    setRequests(tasks.filter((task)=>{return task.manager_email===user.Email}));
-  },[tasks])
-  // const req = tasks.filter((task)=>{return task.manager_email===user.Email});
-  // setRequests(req);
-  
-
+const Assigned = () => {
+  const [requests, setRequests] = useState([
+    { 
+      id: 'T-12345', 
+      name: "Tender Approval", 
+      date: "2024-11-27", 
+      reqby: "Prasad Mahankal", 
+      category: "Permission", 
+      status: "Assigned", 
+      action: "None",
+      description: "Tender approval required for new office supplies procurement",
+      priority: "High",
+      completionDate: "2024-11-26 15:30",
+      documents: [
+        { name: "tender_doc.pdf", type: "PDF" },
+        { name: "cost_analysis.xlsx", type: "Excel" }
+      ],
+      additionalNotes: "All required documentation has been verified and cost analysis completed.",
+      declineReason: '',
+      declineMessage: ''
+    },
+    { 
+      id: 'T-12346', 
+      name: "Budget Allocation", 
+      date: "2024-12-01", 
+      reqby: "Pranav Patil", 
+      category: "Budget", 
+      status: "Pending", 
+      action: "Approve",
+      description: "Annual budget allocation for IT department infrastructure upgrades",
+      priority: "High",
+      completionDate: "2024-11-30 14:45",
+      documents: [
+        { name: "budget_proposal.pdf", type: "PDF" },
+        { name: "financial_forecast.xlsx", type: "Excel" }
+      ],
+      additionalNotes: "Budget proposal includes detailed breakdown of infrastructure needs and ROI analysis.",
+      declineReason: '',
+      declineMessage: ''
+    },
+    { 
+      id: 'T-12347', 
+      name: "Data Sharing Agreement", 
+      date: "2024-12-03", 
+      reqby: "Siddhesh Patil", 
+      category: "Data sharing", 
+      status: "Assigned", 
+      action: "None",
+      description: "Data sharing agreement with external vendor for cloud services",
+      priority: "Medium",
+      completionDate: "2024-12-02 11:20",
+      documents: [
+        { name: "agreement_draft.pdf", type: "PDF" }
+      ],
+      additionalNotes: "Awaiting additional documentation from vendor",
+      declineReason: '',
+      declineMessage: ''
+    },
+    { 
+      id: 'T-12348', 
+      name: "Infrastructure Development", 
+      date: "2024-12-05", 
+      reqby: "Payal Pawar", 
+      category: "General", 
+      status: "Pending", 
+      action: "Approve",
+      description: "Server room expansion and network infrastructure upgrade",
+      priority: "Critical",
+      completionDate: "2024-12-04 16:15",
+      documents: [
+        { name: "infrastructure_plan.pdf", type: "PDF" }
+      ],
+      additionalNotes: "Project timeline and resource allocation has been finalized.",
+      declineReason: '',
+      declineMessage: ''
+    }
+  ]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -30,7 +95,7 @@ const Approval = ({tasks}) => {
 
   const handleFinalApprove = () => {
     setRequests(requests.map(request =>
-      request.id === selectedRequest.id ? { ...request, status: 'Approved' } : request
+      request.id === selectedRequest.id ? { ...request, status: 'Approved', action: 'None' } : request
     ));
     setShowApprovalModal(false);
     setSelectedRequest(null);
@@ -47,6 +112,7 @@ const Approval = ({tasks}) => {
         ? { 
             ...request, 
             status: 'Declined', 
+            action: 'None',
             declineReason,
             declineMessage 
           } 
@@ -58,9 +124,30 @@ const Approval = ({tasks}) => {
     setSelectedRequestId(null);
   };
 
+  const filteredRequests = requests.filter(request =>
+    (request.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedCategory === '' || request.category === selectedCategory)
+  );
 
-  const renderDeclineDetails = (request) => {
-    if (request.status === 'Declined') {
+  const renderActionButtons = (request) => {
+    if (request.action === 'Approve') {
+      return (
+        <>
+          <button
+            className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 transition duration-200"
+            onClick={() => handleApproveClick(request)}
+          >
+            Approve
+          </button>
+          <button
+            className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition duration-200"
+            onClick={() => handleDecline(request.id)}
+          >
+            Decline
+          </button>
+        </>
+      );
+    } else if (request.status === 'Declined') {
       return (
         <div className="text-sm text-red-600">
           <div><strong>Reason:</strong> {request.declineReason}</div>
@@ -69,8 +156,24 @@ const Approval = ({tasks}) => {
           )}
         </div>
       );
+    } else {
+      return (
+        <span className="text-gray-500 italic">
+          {getStatusMessage(request.status)}
+        </span>
+      );
     }
-    return null;
+  };
+
+  const getStatusMessage = (status) => {
+    switch (status) {
+      case 'Assigned':
+        return 'Not yet completed';
+      case 'Approved':
+        return 'Request approved';
+      default:
+        return 'No action required';
+    }
   };
 
   const TaskDetailsModal = ({ request, onClose, onApprove }) => (
@@ -83,7 +186,7 @@ const Approval = ({tasks}) => {
             <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
             <div className="space-y-3">
               <div>
-                <span className="font-medium">Task ID:</span> {request._id}
+                <span className="font-medium">Task ID:</span> {request.id}
               </div>
               <div>
                 <span className="font-medium">Title:</span> {request.name}
@@ -156,7 +259,6 @@ const Approval = ({tasks}) => {
     <div className="mx-auto p-6 bg-gray-100 min-h-screen">
       <h1 className="text-xl sm:text-2xl font-bold mb-4">Incoming Requests</h1>
 
-      {/* Search and Filter */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div className="relative w-full md:w-1/2 mb-4 md:mb-0">
           <input
@@ -184,7 +286,6 @@ const Approval = ({tasks}) => {
         </select>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="table-auto w-full bg-white shadow-md rounded-lg border border-gray-300">
           <thead>
@@ -199,34 +300,17 @@ const Approval = ({tasks}) => {
             </tr>
           </thead>
           <tbody>
-            {requests.map(request => (
+            {filteredRequests.map(request => (
               <tr key={request.id} className="border-b text-center">
-                <td className="px-4 py-2">{request._id}</td>
-                <td className="px-4 py-2">{request.task_name}</td>
+                <td className="px-4 py-2">{request.id}</td>
+                <td className="px-4 py-2">{request.name}</td>
                 <td className="px-4 py-2">{request.date}</td>
-                <td className="px-4 py-2">{request.employee_email}</td>
-                <td className="px-4 py-2">{request.department}</td>
+                <td className="px-4 py-2">{request.reqby}</td>
+                <td className="px-4 py-2">{request.category}</td>
                 <td className={`px-4 py-2 ${getStatusClass(request.status)}`}>{request.status}</td>
                 <td className="px-4 py-2">
                   <div className="flex flex-col items-center gap-2">
-                    {request.status === 'pending' ? (
-                      <>
-                        <button
-                          className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 transition duration-200"
-                          onClick={() => handleApproveClick(request)}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          className="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 transition duration-200"
-                          onClick={() => handleDecline(request.id)}
-                        >
-                          Decline
-                        </button>
-                      </>
-                    ) : (
-                      renderDeclineDetails(request)
-                    )}
+                    {renderActionButtons(request)}
                   </div>
                 </td>
               </tr>
@@ -235,7 +319,6 @@ const Approval = ({tasks}) => {
         </table>
       </div>
 
-      {/* Task Details Modal */}
       {showApprovalModal && selectedRequest && (
         <TaskDetailsModal
           request={selectedRequest}
@@ -247,7 +330,6 @@ const Approval = ({tasks}) => {
         />
       )}
 
-      {/* Decline Modal */}
       {declineModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80">
@@ -311,4 +393,4 @@ const getStatusClass = (status) => {
   }
 };
 
-export default Approval;
+export default Assigned;

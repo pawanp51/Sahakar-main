@@ -25,9 +25,11 @@ app.use(cors(corsOptions));
 const loginrouter = require('./router/login');
 const projectrouter = require('./router/project');
 const taskrouter = require('./router/task');
+const getfilesrouter = require('./router/file');
 app.use("/",loginrouter)
 app.use("/projects",projectrouter);
 app.use("/tasks",taskrouter);
+app.use("/getfiles",getfilesrouter);
 
 
 
@@ -35,10 +37,7 @@ app.use("/tasks",taskrouter);
 const multer = require('multer');
 const storage = multer.memoryStorage();  // Store files in memory as Buffer
 const upload = multer({ storage: storage }).array('files', 10); // Accepts up to 10 files
-
-
-
-
+const File = require("./Schema/TaskFileSchema");
 app.post('/upload', upload, async (req, res) => {
     try {
       if (!req.files) {
@@ -46,6 +45,8 @@ app.post('/upload', upload, async (req, res) => {
       }
   
       const files = req.files;  // Files array sent from frontend
+      const {task_id,to} = req.body;
+      
       
       // Store multiple files in the database
       const fileRecords = await Promise.all(files.map(file => {
@@ -54,6 +55,8 @@ app.post('/upload', upload, async (req, res) => {
           contentType: file.mimetype,
           originalName: file.originalname,
           size: file.size,
+          task_id: task_id,
+          to: to, 
         });
         return fileRecord.save();
       }));
