@@ -13,6 +13,7 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [newEvent, setNewEvent] = useState({ name: '', description: '', link: '' });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewingEvents, setIsViewingEvents] = useState(false);
 
   const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
   const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
@@ -35,6 +36,7 @@ const Calendar = () => {
     setSelectedDate(date);
     setIsModalOpen(true);
     setNewEvent({ name: '', description: '', link: '' });
+    setIsViewingEvents(false);
   };
 
   const handleSaveEvent = () => {
@@ -52,6 +54,17 @@ const Calendar = () => {
       }));
       setIsModalOpen(false);  // Close modal after saving event
     }
+  };
+
+  const handleDeleteEvent = (date, index) => {
+    setMeetings((prevMeetings) => {
+      const updatedMeetings = { ...prevMeetings };
+      updatedMeetings[date] = updatedMeetings[date].filter((_, i) => i !== index);
+      if (updatedMeetings[date].length === 0) {
+        delete updatedMeetings[date];
+      }
+      return updatedMeetings;
+    });
   };
 
   const handleCancel = () => {
@@ -123,7 +136,7 @@ const Calendar = () => {
         </div>
 
         <div className="grid grid-cols-7 gap-3">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          {"Sun Mon Tue Wed Thu Fri Sat".split(" ").map((day) => (
             <div key={day} className="text-center font-semibold text-sm">{day}</div>
           ))}
           {renderDays()}
@@ -142,18 +155,28 @@ const Calendar = () => {
           </button>
         </div>
         <div className="space-y-5">
-          {Object.keys(meetings).map((date, index) => (
-            <div key={index} className="mb-6">
-              <h3 className="font-semibold text-lg text-gray-700">{date}</h3>
-              {meetings[date].map((meeting, idx) => (
-                <div key={idx} className="text-sm p-4 bg-gray-100 rounded-lg shadow-lg mt-2">
-                  <span className="block font-bold text-gray-900">{meeting.title}</span>
-                  <p className="mt-2 text-gray-600">{meeting.description}</p>
-                  <a href={meeting.link} className="text-blue-600 hover:text-blue-800 mt-2 block">Join Meeting</a>
-                </div>
-              ))}
-            </div>
-          ))}
+{/* Scheduled Meetings Side */}
+<div className="w-3/5 border p-6 rounded-3xl shadow-2xl bg-white">
+
+  <div className="space-y-5">
+    {/* Display only the three constant events */}
+    <div className="text-sm p-4 bg-gray-100 rounded-lg shadow-lg">
+      <span className="block font-bold text-gray-900">Team Standup</span>
+      <p className="mt-2 text-gray-600">Daily team standup meeting to sync up on project status.</p>
+      <a href="https://sahakar-video-call.vercel.app/?roomID=9524" className="text-blue-600 hover:text-blue-800 mt-2 block">Join Meeting</a>
+    </div>
+    <div className="text-sm p-4 bg-gray-100 rounded-lg shadow-lg">
+      <span className="block font-bold text-gray-900">Client Presentation</span>
+      <p className="mt-2 text-gray-600">Present the latest project developments to the client.</p>
+      <a href="https://sahakar-video-call.vercel.app/?roomID=9524" className="text-blue-600 hover:text-blue-800 mt-2 block">Join Meeting</a>
+    </div>
+    <div className="text-sm p-4 bg-gray-100 rounded-lg shadow-lg">
+      <span className="block font-bold text-gray-900">Monthly Review</span>
+      <p className="mt-2 text-gray-600">Review of the monthly progress and next steps.</p>
+      <a href="https://sahakar-video-call.vercel.app/?roomID=9524" className="text-blue-600 hover:text-blue-800 mt-2 block">Join Meeting</a>
+    </div>
+  </div>
+</div>
         </div>
       </div>
 
@@ -161,37 +184,63 @@ const Calendar = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
-            <h2 className="text-2xl font-semibold mb-4">Add New Event</h2>
-            <div className="mb-4">
-              <label className="block mb-2 font-bold">Event Name</label>
-              <input 
-                type="text" 
-                value={newEvent.name} 
-                onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })} 
-                className="w-full border p-2 rounded-lg" 
-              />
+            <div className="flex justify-between items-center mb-4">
+              <button onClick={() => setIsViewingEvents(false)} className={`px-4 py-2 rounded-lg ${!isViewingEvents ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>Add Event</button>
+              <button onClick={() => setIsViewingEvents(true)} className={`px-4 py-2 rounded-lg ${isViewingEvents ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>View Events</button>
+              <button onClick={handleCancel} className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Back</button>
             </div>
-            <div className="mb-4">
-              <label className="block mb-2 font-bold">Event Description</label>
-              <textarea 
-                value={newEvent.description} 
-                onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} 
-                className="w-full border p-2 rounded-lg" 
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2 font-bold">Event Link (Optional)</label>
-              <input 
-                type="url" 
-                value={newEvent.link} 
-                onChange={(e) => setNewEvent({ ...newEvent, link: e.target.value })} 
-                className="w-full border p-2 rounded-lg" 
-              />
-            </div>
-            <div className="flex justify-end">
-              <button onClick={handleCancel} className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-600 transition duration-200 mr-2">Cancel</button>
-              <button onClick={handleSaveEvent} className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Save</button>
-            </div>
+
+            {!isViewingEvents ? (
+              <>
+                <h2 className="text-2xl font-semibold mb-4">Add New Event</h2>
+                <div className="mb-4">
+                  <label className="block mb-2 font-bold">Event Name</label>
+                  <input 
+                    type="text" 
+                    value={newEvent.name} 
+                    onChange={(e) => setNewEvent({ ...newEvent, name: e.target.value })} 
+                    className="w-full border p-2 rounded-lg" 
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2 font-bold">Event Description</label>
+                  <textarea 
+                    value={newEvent.description} 
+                    onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} 
+                    className="w-full border p-2 rounded-lg" 
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2 font-bold">Event Link (Optional)</label>
+                  <input 
+                    type="url" 
+                    value={newEvent.link} 
+                    onChange={(e) => setNewEvent({ ...newEvent, link: e.target.value })} 
+                    className="w-full border p-2 rounded-lg" 
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button onClick={handleCancel} className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-600 transition duration-200 mr-2">Cancel</button>
+                  <button onClick={handleSaveEvent} className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">Save</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-semibold mb-4">Events This Month</h2>
+                <div className="space-y-4">
+                  {generateDays().map((day) => (
+                    day.meetings.map((meeting, i) => (
+                      <div key={`${day.date}-${i}`} className="p-4 bg-gray-100 rounded-lg shadow-lg">
+                        <span className="block font-bold text-gray-900">{meeting.title}</span>
+                        <p className="mt-2 text-gray-600">{meeting.description}</p>
+                        {meeting.link && <a href={meeting.link} className="text-blue-600 hover:text-blue-800">Join Meeting</a>}
+                        <button onClick={() => handleDeleteEvent(day.date, i)} className="bg-red-500 text-white px-3 py-1  ml-10 mt-2 rounded-lg shadow-md hover:bg-red-600 transition duration-200">Delete</button>
+                      </div>
+                    ))
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -200,3 +249,4 @@ const Calendar = () => {
 };
 
 export default Calendar;
+
