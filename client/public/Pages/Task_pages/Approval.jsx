@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const Approval = () => {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState([
     { 
       id: 'T-12345', 
@@ -130,19 +132,20 @@ const Approval = () => {
   const [declineMessage, setDeclineMessage] = useState('');
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState(null);
+  // const [selectedRequest, setSelectedRequest] = useState(null);
 
   const handleApproveClick = (request) => {
-    setSelectedRequest(request);
-    setShowApprovalModal(true);
+    // setSelectedRequest(request);
+    // setShowApprovalModal(true);
+    navigate('/Approve');
   };
 
   const handleFinalApprove = () => {
     setRequests(requests.map(request =>
       request.id === selectedRequest.id ? { ...request, status: 'Approved' } : request
     ));
-    setShowApprovalModal(false);
-    setSelectedRequest(null);
+    // setShowApprovalModal(false);
+    // setSelectedRequest(null);
   };
 
   const handleDecline = (id) => {
@@ -164,7 +167,7 @@ const Approval = () => {
     setDeclineModal(false);
     setDeclineReason('');
     setDeclineMessage('');
-    setSelectedRequestId(null);
+    // setSelectedRequestId(null);
   };
 
   const filteredRequests = requests.filter(request =>
@@ -185,85 +188,6 @@ const Approval = () => {
     }
     return null;
   };
-
-  const TaskDetailsModal = ({ request, onClose, onApprove }) => (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6">Task Details</h2>
-        
-        <div className="grid grid-cols-2 gap-6 mb-6">
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
-            <div className="space-y-3">
-              <div>
-                <span className="font-medium">Task ID:</span> {request.id}
-              </div>
-              <div>
-                <span className="font-medium">Title:</span> {request.name}
-              </div>
-              <div>
-                <span className="font-medium">Category:</span> {request.category}
-              </div>
-              <div>
-                <span className="font-medium">Priority:</span> {request.priority}
-              </div>
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Completion Details</h3>
-            <div className="space-y-3">
-              <div>
-                <span className="font-medium">Requested By:</span> {request.reqby}
-              </div>
-              <div>
-                <span className="font-medium">Completion Date:</span> {request.completionDate}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4">Task Description</h3>
-          <p className="text-gray-700">{request.description}</p>
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4">Attached Documents</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {request.documents.map((doc, index) => (
-              <div key={index} className="flex items-center p-3 border rounded-lg">
-                <div className="flex-1">
-                  <p className="font-medium">{doc.name}</p>
-                  <p className="text-sm text-gray-500">{doc.type}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-4">Additional Notes</h3>
-          <p className="text-gray-700">{request.additionalNotes}</p>
-        </div>
-
-        <div className="flex justify-end gap-4">
-          <button
-            className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-200"
-            onClick={onApprove}
-          >
-            Approve
-          </button>
-          <button
-            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="mx-auto p-6 bg-gray-100 min-h-screen">
@@ -354,7 +278,7 @@ const Approval = () => {
           request={selectedRequest}
           onClose={() => {
             setShowApprovalModal(false);
-            setSelectedRequest(null);
+            // setSelectedRequest(null);
           }}
           onApprove={handleFinalApprove}
         />
