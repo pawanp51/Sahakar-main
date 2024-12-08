@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
+import { saveAs } from 'file-saver';
 
 const departments = {
   water: {
@@ -55,7 +57,6 @@ Dear [Recipient],
 The following orders are issued with immediate effect:
 
 1. [Order Details]
-2. [Order Details]
 
 All concerned are directed to comply with the above instructions without delay. Please ensure that these orders are followed meticulously to maintain the safety and integrity of operations.
 
@@ -212,18 +213,22 @@ const Templates = () => {
     }));
   };
 
+  const formatTemplate = (template) => {
+    let formatted = template;
+    Object.keys(placeholderValues).forEach((key) => {
+      formatted = formatted.replace(`[${key}]`, placeholderValues[key]);
+    });
+    return formatted;
+  };
+
   const generatePDF = () => {
     if (selectedDepartment) {
       const doc = new jsPDF();
       doc.setFontSize(16);
       doc.text(selectedDepartment.title, 10, 20);
       doc.setFontSize(12);
-      let letter = selectedDepartment.letter;
 
-      Object.keys(placeholderValues).forEach((key) => {
-        letter = letter.replace(`[${key}]`, placeholderValues[key]);
-      });
-
+      const letter = formatTemplate(selectedDepartment.letter);
       const lines = letter.split('\n');
       let y = 30;
       lines.forEach((line) => {
@@ -234,6 +239,93 @@ const Templates = () => {
       doc.save(`${selectedDepartment.title}.pdf`);
     }
   };
+
+  const generateDOCX = () => {
+    if (selectedDepartment) {
+      const formattedLetter = formatTemplate(selectedDepartment.letter);
+      const paragraphs = formattedLetter.split('\n').map((line) =>
+        new Paragraph({
+          children: [new TextRun({ text: line, break: 1 })],
+        })
+      );
+
+      const doc = new Document({
+        sections: [
+          {
+            children: paragraphs,
+          },
+        ],
+      });
+
+      Packer.toBlob(doc).then((blob) => {
+        saveAs(blob, `${selectedDepartment.title}.docx`);
+      });
+    }
+  };
+
+  const handlePrint = () => {
+    if (selectedDepartment) {
+      const formattedLetter = formatTemplate(selectedDepartment.letter);
+  
+      const printWindow = window.open('', '_blank');
+  
+      printWindow.document.write(`
+        <html>
+          <head>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                font-size: 12pt;
+                margin: 1.5cm;
+              }
+              h1 {
+                font-size: 16pt;
+                text-align: center;
+                margin-bottom: 20px;
+              }
+              h2, h3 {
+                font-size: 14pt;
+                margin-bottom: 10px;
+              }
+              .content {
+                font-size: 12pt;
+                line-height: 1.5;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                margin-top: 20px;
+              }
+              .signature {
+                margin-top: 40px;
+                font-size: 12pt;
+              }
+              pre {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>${selectedDepartment.title}</h1>
+            <div class="content">
+              <pre>${formattedLetter}</pre>
+            </div>
+            <div class="signature">
+            </div>
+          </body>
+        </html>
+      `);
+  
+      printWindow.document.close();
+  
+      printWindow.onload = () => {
+        printWindow.print();
+        printWindow.onafterprint = () => {
+          printWindow.close();
+        };
+      };
+    }
+  };
+  
 
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen p-6">
@@ -291,17 +383,8 @@ const Templates = () => {
               ))}
             </div>
 
-            <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-sm font-mono mb-10 text-gray-800 h-[30vh] w-[100vh] overflow-auto">
-              {Object.keys(placeholderValues).length > 0
-                ? Object.keys(placeholderValues).reduce(
-                    (acc, key) => acc.replace(`[${key}]`, placeholderValues[key]),
-                    selectedDepartment.letter
-                  )
-                : selectedDepartment.letter.split('\n').map((line, index) => (
-                    <p key={index} className="mb-2">
-                      {line}
-                    </p>
-                  ))}
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-sm font-mono mb-10 text-gray-800 whitespace-pre-wrap overflow-auto">
+              {formatTemplate(selectedDepartment.letter)}
             </div>
 
             <div className="flex justify-end space-x-4">
@@ -312,10 +395,22 @@ const Templates = () => {
                 Back
               </button>
               <button
+                onClick={handlePrint}
+                className="bg-blue-500 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-600 transition"
+              >
+                Print
+              </button>
+              <button
                 onClick={generatePDF}
                 className="bg-green-700 text-white px-6 py-2 rounded-md font-semibold hover:bg-green-800 transition"
               >
                 Download PDF
+              </button>
+              <button
+                onClick={generateDOCX}
+                className="bg-blue-700 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-800 transition"
+              >
+                Download DOCX
               </button>
             </div>
           </div>
