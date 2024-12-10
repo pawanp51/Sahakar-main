@@ -1,337 +1,184 @@
 import React, { useState } from 'react';
-import { IoSearchSharp } from "react-icons/io5";
+import { IoSearchSharp } from 'react-icons/io5';
 
 const Complaints = () => {
-  const [editingComplaint, setEditingComplaint] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showForwardModal, setShowForwardModal] = useState(false);
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [forwardedComplaints, setForwardedComplaints] = useState([]);
+  const [activeTab, setActiveTab] = useState('complaints'); // Tracks active tab
+
+  const departments = ['Road Transport', 'Water', 'Civil', 'Electrical', 'Mechanical'];
+
   const [complaints, setComplaints] = useState([
-    {
-      id: 'C1234',
-      name: 'Raj Kumar Sharma',
-      subject: 'Street Lights not working',
-      date: '17/2/2024',
-      dueDate: '19/6/2024',
-      status: 'Completed',
-      platform: 'Mobile App',
-      location: 'Baner, Pune',
-    },
-    {
-      id: 'C1235',
-      name: 'Aarti Patel',
-      subject: 'Dustbins are overflowing',
-      date: '20/2/2024',
-      dueDate: '22/6/2024',
-      status: 'Assigned',
-      platform: 'Website',
-      location: 'Hadapsar, Pune',
-    },
-    {
-      id: 'C1236',
-      name: 'Sunil Verma',
-      subject: 'Electricity pole is damaged',
-      date: '25/2/2024',
-      dueDate: '30/6/2024',
-      status: 'In Progress',
-      platform: 'Mobile App',
-      location: 'Kothrud, Pune',
-    },
-    {
-      id: 'C1237',
-      name: 'Anjali Singh',
-      subject: 'Road construction causing traffic issues',
-      date: '28/2/2024',
-      dueDate: '5/7/2024',
-      status: 'Completed',
-      platform: 'Website',
-      location: 'Viman Nagar, Pune',
-    },
-    {
-      id: 'C1238',
-      name: 'Rajiv Mehta',
-      subject: 'Government building maintenance required',
-      date: '2/3/2024',
-      dueDate: '10/7/2024',
-      status: 'Assigned',
-      platform: 'Mobile App',
-      location: 'Camp, Pune',
-    },
+    { id: 'C1234', name: 'Raj Kumar Sharma', subject: 'Street Lights not working', date: '17/2/2024', location: 'Baner, Pune' },
+    { id: 'C1235', name: 'Aarti Patel', subject: 'Dustbins are overflowing', date: '20/2/2024', location: 'Hadapsar, Pune' },
+    { id: 'C1236', name: 'Vikas Jain', subject: 'Water supply interruptions', date: '22/2/2024', location: 'Kothrud, Pune' },
+    { id: 'C1237', name: 'Nisha Verma', subject: 'Potholes on the road', date: '23/2/2024', location: 'Pune University, Pune' },
+    { id: 'C1238', name: 'Manoj Kumar', subject: 'Leaking water pipes', date: '25/2/2024', location: 'Viman Nagar, Pune' },
+    { id: 'C1239', name: 'Pooja Joshi', subject: 'Broken streetlights', date: '26/2/2024', location: 'Aundh, Pune' },
+    { id: 'C1240', name: 'Anil Patil', subject: 'Damaged footpath', date: '28/2/2024', location: 'Koregaon Park, Pune' },
+    { id: 'C1241', name: 'Rohit Bhatia', subject: 'Broken water tank', date: '1/3/2024', location: 'Bavdhan, Pune' },
+    { id: 'C1242', name: 'Sunita Reddy', subject: 'Garbage piling up', date: '5/3/2024', location: 'Camp, Pune' },
+    { id: 'C1243', name: 'Aditya Mehta', subject: 'Electrical wire exposed', date: '7/3/2024', location: 'Pashan, Pune' },
+    { id: 'C1244', name: 'Priya Singh', subject: 'Uneven road surface', date: '9/3/2024', location: 'Dhole Patil Road, Pune' },
+    { id: 'C1245', name: 'Suresh Yadav', subject: 'Broken drainage system', date: '10/3/2024', location: 'Hadapsar, Pune' },
+    { id: 'C1246', name: 'Amit Sharma', subject: 'Water leakage in basement', date: '12/3/2024', location: 'Baner, Pune' },
+    { id: 'C1247', name: 'Kavita Mishra', subject: 'Lack of bus stops', date: '14/3/2024', location: 'Magarpatta, Pune' },
+    { id: 'C1248', name: 'Deepak Gupta', subject: 'Damaged road signs', date: '15/3/2024', location: 'Vishrantwadi, Pune' },
   ]);
 
-  const [forwardedComplaints, setForwardedComplaints] = useState([
-    {
-      id: 'F5678',
-      name: 'Suresh Raina',
-      subject: 'Road Maintenance Request',
-      date: '10/9/2024',
-      dueDate: '15/12/2024',
-      status: 'Forwarded',
-      platform: 'Email',
-      location: 'Sector 17, Chandigarh',
-    },
-    {
-      id: 'C1238',
-      name: 'Rajiv Mehta',
-      subject: 'Government building maintenance required',
-      date: '2/3/2024',
-      dueDate: '10/7/2024',
-      status: 'Assigned',
-      platform: 'Mobile App',
-      location: 'Camp, Pune',
-    },
-    {
-      id: 'F5678',
-      name: 'Suresh Raina',
-      subject: 'Road Maintenance Request',
-      date: '10/9/2024',
-      dueDate: '15/12/2024',
-      status: 'Forwarded',
-      platform: 'Email',
-      location: 'Sector 17, Chandigarh',
-    },
-    {
-      id: 'C1239',
-      name: 'Meena Sharma',
-      subject: 'Broken street pavement',
-      date: '5/3/2024',
-      dueDate: '15/7/2024',
-      status: 'In Progress',
-      platform: 'Mobile App',
-      location: 'Ghatkopar, Mumbai',
-    },
-    {
-      id: 'C1240',
-      name: 'Amit Kumar',
-      subject: 'Illegal construction causing problems',
-      date: '12/3/2024',
-      dueDate: '20/7/2024',
-      status: 'Assigned',
-      platform: 'Website',
-      location: 'Koramangala, Bangalore',
-    },
-  ]);
+  const filteredComplaints = complaints.filter((complaint) =>
+    complaint.subject.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const handleEditClick = (complaint) => {
-    setEditingComplaint(complaint);
+  const handleForwardClick = (complaint) => {
+    setSelectedComplaint(complaint);
+    setShowForwardModal(true);
   };
 
-  const handleChange = (e) => {
-    setEditingComplaint({
-      ...editingComplaint,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSave = () => {
-    setComplaints(
-      complaints.map((complaint) =>
-        complaint.id === editingComplaint.id ? editingComplaint : complaint
-      )
-    );
-    setEditingComplaint(null);
+  const handleForwardSubmit = (dept) => {
+    if (selectedComplaint) {
+      setForwardedComplaints([...forwardedComplaints, { ...selectedComplaint, forwardedTo: dept }]);
+      setShowForwardModal(false);
+    }
   };
 
   return (
     <div className="mx-auto p-6 bg-gray-100 min-h-screen">
-      {/* Header section */}
-      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-between items-center bg-white p-4 rounded-lg shadow-md mb-5">
-        <h1 className="font-medium text-xl sm:text-2xl">Grievances List</h1>
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full sm:w-auto">
-          <button className="border rounded-md p-2 bg-blue-700 text-white hover:bg-blue-600 w-full sm:w-auto">Apply Filter</button>
-          <div className="flex items-center gap-3 w-full">
+      {/* Tabs Section */}
+      <div className="flex gap-4 mb-6">
+        <button
+          onClick={() => setActiveTab('complaints')}
+          className={`p-3 rounded-md ${
+            activeTab === 'complaints' ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-700'
+          }`}
+        >
+          Complaints
+        </button>
+        <button
+          onClick={() => setActiveTab('forwarded')}
+          className={`p-3 rounded-md ${
+            activeTab === 'forwarded' ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-700'
+          }`}
+        >
+          Forwarded Complaints
+        </button>
+      </div>
+
+      {/* Complaints Section */}
+      {activeTab === 'complaints' && (
+        <div>
+          <div className="flex items-center gap-3 mb-6">
             <input
               type="text"
               placeholder="Search..."
-              className="border rounded-md p-2 flex-1"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border rounded-md p-3 flex-1 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <IoSearchSharp size={30} className="cursor-pointer text-blue-700 hover:text-blue-600" />
           </div>
-        </div>
-      </div>
-
-      <hr className="mb-6 border-gray-300" />
-
-      {/* Complaints table */}
-      <div className="overflow-x-auto">
-        <table className="table-auto min-w-full text-left bg-white shadow-md rounded-lg">
-          <thead className="bg-gradient-to-r from-blue-700 to-blue-900 text-white">
-            <tr className="h-16">
-              <th className="px-2 sm:px-4 py-2">C-id</th>
-              <th className="px-2 sm:px-4 py-2">Name</th>
-              <th className="px-2 sm:px-4 py-2">Subject</th>
-              <th className="px-2 sm:px-4 py-2">Date</th>
-              <th className="px-2 sm:px-4 py-2">Due Date</th>
-              <th className="px-2 sm:px-4 py-2">Status</th>
-              <th className="px-2 sm:px-4 py-2">Platform</th>
-              <th className="px-2 sm:px-4 py-2">Location</th>
-              <th className="px-2 sm:px-4 py-2">Change Status</th>
-              <th className="px-2 sm:px-4 py-2">Forward</th>
-              <th className="px-2 sm:px-4 py-2">Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {complaints.map((complaint) => (
-              <tr key={complaint.id} className="border-b">
-                <td className="px-2 sm:px-4 py-2">{complaint.id}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.name}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.subject}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.date}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.dueDate}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.status}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.platform}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.location}</td>
-                <td className="text-lime-800 cursor-pointer px-2 sm:px-4 py-2">Change status</td>
-                <td className="text-cyan-900 cursor-pointer px-2 sm:px-4 py-2">Forward</td>
-                <td className="px-2 sm:px-4 py-2">
-                  <button
-                    className="border rounded-md p-1 px-3 bg-blue-100 hover:bg-blue-200"
-                    onClick={() => handleEditClick(complaint)}
-                  >
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {editingComplaint && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-1/2" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-            <h2 className="text-xl font-medium mb-4">Edit Complaint</h2>
-            <form>
-              <div className="mb-4">
-                <label className="block mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={editingComplaint.name}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">Subject</label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={editingComplaint.subject}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">Date</label>
-                <input
-                  type="text"
-                  name="date"
-                  value={editingComplaint.date}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">Due Date</label>
-                <input
-                  type="text"
-                  name="dueDate"
-                  value={editingComplaint.dueDate}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">Status</label>
-                <input
-                  type="text"
-                  name="status"
-                  value={editingComplaint.status}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">Platform</label>
-                <input
-                  type="text"
-                  name="platform"
-                  value={editingComplaint.platform}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-1">Location</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={editingComplaint.location}
-                  onChange={handleChange}
-                  className="border rounded-md p-2 w-full"
-                />
-              </div>
-              <div className="flex justify-end gap-4">
-                <button
-                  type="button"
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
-                  onClick={handleSave}
-                >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md"
-                  onClick={() => setEditingComplaint(null)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+          <div className="overflow-x-auto shadow-md rounded-lg">
+            <table className="table-auto min-w-full text-left bg-white">
+              <thead className="bg-gradient-to-r from-blue-700 to-blue-900 text-white">
+                <tr className="h-16">
+                  <th className="px-4 py-2 text-center">C-id</th>
+                  <th className="px-4 py-2 text-center">Name</th>
+                  <th className="px-4 py-2 text-center">Subject</th>
+                  <th className="px-4 py-2 text-center">Date</th>
+                  <th className="px-4 py-2 text-center">Location</th>
+                  <th className="px-4 py-2 text-center">Forward</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredComplaints.map((complaint) => (
+                  <tr key={complaint.id} className="border-b hover:bg-gray-100 transition-all duration-150">
+                    <td className="px-4 py-2 text-center">{complaint.id}</td>
+                    <td className="px-4 py-2 text-center">{complaint.name}</td>
+                    <td className="px-4 py-2 text-center">{complaint.subject}</td>
+                    <td className="px-4 py-2 text-center">{complaint.date}</td>
+                    <td className="px-4 py-2 text-center">{complaint.location}</td>
+                    <td className="px-4 py-2 text-center">
+                      <button
+                        onClick={() => handleForwardClick(complaint)}
+                        className="border rounded-md p-2 px-4 bg-green-100 text-green-700 hover:bg-green-200 transition-all"
+                      >
+                        Forward
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
 
-      <h1 className="text-center text-xl font-medium my-6">Forwarded Complaints</h1>
-
-      <div className="overflow-x-auto">
-        <table className="table-auto min-w-full text-left bg-white shadow-md rounded-lg">
-          <thead className="bg-gradient-to-r from-blue-700 to-blue-900 text-white">
-            <tr className="h-16">
-              <th className="px-2 sm:px-4 py-2">C-id</th>
-              <th className="px-2 sm:px-4 py-2">Name</th>
-              <th className="px-2 sm:px-4 py-2">Subject</th>
-              <th className="px-2 sm:px-4 py-2">Date</th>
-              <th className="px-2 sm:px-4 py-2">Due Date</th>
-              <th className="px-2 sm:px-4 py-2">Status</th>
-              <th className="px-2 sm:px-4 py-2">Platform</th>
-              <th className="px-2 sm:px-4 py-2">Location</th>
-              <th className="px-2 sm:px-4 py-2">Change Status</th>
-              <th className="px-2 sm:px-4 py-2">Forward</th>
-              <th className="px-2 sm:px-4 py-2">Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {forwardedComplaints.map((complaint) => (
-              <tr key={complaint.id} className="border-b">
-                <td className="px-2 sm:px-4 py-2">{complaint.id}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.name}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.subject}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.date}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.dueDate}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.status}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.platform}</td>
-                <td className="px-2 sm:px-4 py-2">{complaint.location}</td>
-                <td className="text-lime-800 cursor-pointer px-2 sm:px-4 py-2">Change status</td>
-                <td className="text-cyan-900 cursor-pointer px-2 sm:px-4 py-2">Forward</td>
-                <td className="px-2 sm:px-4 py-2">
-                  <button className="border rounded-md p-1 px-3 bg-blue-100 hover:bg-blue-200">
-                    Edit
-                  </button>
-                </td>
+      {/* Forwarded Complaints Section */}
+      {activeTab === 'forwarded' && (
+        <div className="overflow-x-auto shadow-md rounded-lg">
+          <table className="table-auto min-w-full text-left bg-white">
+            <thead className="bg-gradient-to-r from-green-700 to-green-900 text-white">
+              <tr className="h-16">
+                <th className="px-4 py-2 text-center">F-id</th>
+                <th className="px-4 py-2 text-center">Name</th>
+                <th className="px-4 py-2 text-center">Subject</th>
+                <th className="px-4 py-2 text-center">Date</th>
+                <th className="px-4 py-2 text-center">Location</th>
+                <th className="px-4 py-2 text-center">Forwarded To</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {forwardedComplaints.map((complaint) => (
+                <tr key={complaint.id} className="border-b hover:bg-gray-100 transition-all duration-150">
+                  <td className="px-4 py-2 text-center">{complaint.id}</td>
+                  <td className="px-4 py-2 text-center">{complaint.name}</td>
+                  <td className="px-4 py-2 text-center">{complaint.subject}</td>
+                  <td className="px-4 py-2 text-center">{complaint.date}</td>
+                  <td className="px-4 py-2 text-center">{complaint.location}</td>
+                  <td className="px-4 py-2 text-center">{complaint.forwardedTo}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Forward Modal */}
+      {showForwardModal && selectedComplaint && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h3 className="text-xl font-semibold mb-4">Forward Complaint</h3>
+            <div>
+              <p><strong>Name:</strong> {selectedComplaint.name}</p>
+              <p><strong>Subject:</strong> {selectedComplaint.subject}</p>
+              <p><strong>Date:</strong> {selectedComplaint.date}</p>
+              <p><strong>Location:</strong> {selectedComplaint.location}</p>
+            </div>
+            <div className="mt-4">
+              <h4 className="text-lg font-semibold mb-2">Forward to:</h4>
+              <div className="flex flex-col">
+                {departments.map((dept) => (
+                  <button
+                    key={dept}
+                    onClick={() => handleForwardSubmit(dept)}
+                    className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 mb-2"
+                  >
+                    {dept}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setShowForwardModal(false)}
+                className="mt-4 bg-red-600 text-white p-2 rounded-md hover:bg-red-500"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

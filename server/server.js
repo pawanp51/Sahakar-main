@@ -2,11 +2,12 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 //mongodb
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017",{
-    dbName : 'Sahakar'
+mongoose.connect("mongodb+srv://pranav976:pranav976@cluster0.dmqfq.mongodb.net/",{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
 
 .then(()=> {console.log('connected to database');})

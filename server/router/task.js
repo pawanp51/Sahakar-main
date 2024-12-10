@@ -88,4 +88,16 @@ taskrouter.route("/completetask").post(async(req,res)=>{
     }
 })
 
+taskrouter.route("/approvetask").post(async (req, res) => {
+    const {task_id} = req.body;
+    const updated = await  db.findOneAndUpdate(
+        { _id: new ObjectId(task_id) }, // Correctly construct ObjectId
+        { $set: { status:"approved" } }, // Update
+        { returnDocument: "after" , writeConcern: { w: "majority" }} // Options (return the updated document)
+      );
+      console.log("updated:",updated);
+      res.status(200).json("Task updated successfully");
+
+})
+
 module.exports = taskrouter;

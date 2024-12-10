@@ -3,11 +3,11 @@ const file_db = require("../Schema/TaskFileSchema");
 const getfilesrouter = express.Router();
 
 getfilesrouter.route("/").post(async(req, res) => {
-    const {task_id} = req.body;
+    const {task_id,to} = req.body;
     if (!task_id) {
         return res.status(400).send({message: "Task ID is required"});
     }
-    const data = await file_db.find({task_id: task_id});
+    const data = await file_db.find({task_id: task_id,to:to});
     // console.log(data);
     
     res.status(200).send(data)

@@ -97,7 +97,7 @@ const Task = () => {
               headers: {
                   'Content-Type': 'application/json',
               },
-              body: JSON.stringify({task_id:selectedtask._id}) // Replace with your task ID
+              body: JSON.stringify({task_id:selectedtask._id,to:"employee"}) // Replace with your task ID
             }); // Replace with your backend URL
             const data = await response.json();
             setfetchfiles(data);

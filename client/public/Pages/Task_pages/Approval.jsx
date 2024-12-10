@@ -1,8 +1,11 @@
 import React, { useState ,useMemo} from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { useLoginContext } from '../../ContextApi/Logincontext';
-
+import { useNavigate } from 'react-router-dom';
+import { useTaskContext } from '../../ContextApi/TaskContext';
 const Approval = ({tasks}) => {
+  const {setselected_approve_task} = useTaskContext();
+  const navigate = useNavigate();
   const {user} = useLoginContext();
   const [requests, setRequests] = useState([]);
 
@@ -24,8 +27,11 @@ const Approval = ({tasks}) => {
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   const handleApproveClick = (request) => {
-    setSelectedRequest(request);
-    setShowApprovalModal(true);
+
+    console.log("selected req",request);
+    
+    setselected_approve_task(request);
+    navigate("/Approve")
   };
 
   const handleFinalApprove = () => {
