@@ -7,7 +7,7 @@ const Approval = ({tasks}) => {
   const [requests, setRequests] = useState([]);
 
   useMemo(()=>{
-    setRequests(tasks.filter((task)=>{return task.manager_email===user.Email}));
+    setRequests(tasks.filter((task)=>{return (task.manager_email===user.Email && task.status === 'completed')}));
   },[tasks])
   // const req = tasks.filter((task)=>{return task.manager_email===user.Email});
   // setRequests(req);
@@ -209,7 +209,7 @@ const Approval = ({tasks}) => {
                 <td className={`px-4 py-2 ${getStatusClass(request.status)}`}>{request.status}</td>
                 <td className="px-4 py-2">
                   <div className="flex flex-col items-center gap-2">
-                    {request.status === 'pending' ? (
+                    {request.status === 'completed' ? (
                       <>
                         <button
                           className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 transition duration-200"

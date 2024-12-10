@@ -1,83 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useMemo } from 'react';
 import { FiSearch } from 'react-icons/fi';
-
-const Assigned = () => {
-  const [requests, setRequests] = useState([
-    { 
-      id: 'T-12345', 
-      name: "Tender Approval", 
-      date: "2024-11-27", 
-      reqby: "Prasad Mahankal", 
-      category: "Permission", 
-      status: "Assigned", 
-      action: "None",
-      description: "Tender approval required for new office supplies procurement",
-      priority: "High",
-      completionDate: "2024-11-26 15:30",
-      documents: [
-        { name: "tender_doc.pdf", type: "PDF" },
-        { name: "cost_analysis.xlsx", type: "Excel" }
-      ],
-      additionalNotes: "All required documentation has been verified and cost analysis completed.",
-      declineReason: '',
-      declineMessage: ''
-    },
-    { 
-      id: 'T-12346', 
-      name: "Budget Allocation", 
-      date: "2024-12-01", 
-      reqby: "Pranav Patil", 
-      category: "Budget", 
-      status: "Pending", 
-      action: "Approve",
-      description: "Annual budget allocation for IT department infrastructure upgrades",
-      priority: "High",
-      completionDate: "2024-11-30 14:45",
-      documents: [
-        { name: "budget_proposal.pdf", type: "PDF" },
-        { name: "financial_forecast.xlsx", type: "Excel" }
-      ],
-      additionalNotes: "Budget proposal includes detailed breakdown of infrastructure needs and ROI analysis.",
-      declineReason: '',
-      declineMessage: ''
-    },
-    { 
-      id: 'T-12347', 
-      name: "Data Sharing Agreement", 
-      date: "2024-12-03", 
-      reqby: "Siddhesh Patil", 
-      category: "Data sharing", 
-      status: "Assigned", 
-      action: "None",
-      description: "Data sharing agreement with external vendor for cloud services",
-      priority: "Medium",
-      completionDate: "2024-12-02 11:20",
-      documents: [
-        { name: "agreement_draft.pdf", type: "PDF" }
-      ],
-      additionalNotes: "Awaiting additional documentation from vendor",
-      declineReason: '',
-      declineMessage: ''
-    },
-    { 
-      id: 'T-12348', 
-      name: "Infrastructure Development", 
-      date: "2024-12-05", 
-      reqby: "Payal Pawar", 
-      category: "General", 
-      status: "Pending", 
-      action: "Approve",
-      description: "Server room expansion and network infrastructure upgrade",
-      priority: "Critical",
-      completionDate: "2024-12-04 16:15",
-      documents: [
-        { name: "infrastructure_plan.pdf", type: "PDF" }
-      ],
-      additionalNotes: "Project timeline and resource allocation has been finalized.",
-      declineReason: '',
-      declineMessage: ''
-    }
-  ]);
+import { useLoginContext } from '../../ContextApi/Logincontext';
+const Assigned = ({tasks}) => {
+  const { user } = useLoginContext();
+  const [requests, setRequests] = useState([]);
+  useMemo(()=>{
+    setRequests(tasks.filter((task)=>{return (task.manager_email===user.Email)}));
+  },[tasks])
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -124,13 +53,9 @@ const Assigned = () => {
     setSelectedRequestId(null);
   };
 
-  const filteredRequests = requests.filter(request =>
-    (request.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (selectedCategory === '' || request.category === selectedCategory)
-  );
 
   const renderActionButtons = (request) => {
-    if (request.action === 'Approve') {
+    if (request.status === 'completed') {
       return (
         <>
           <button
@@ -186,13 +111,13 @@ const Assigned = () => {
             <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
             <div className="space-y-3">
               <div>
-                <span className="font-medium">Task ID:</span> {request.id}
+                <span className="font-medium">Task ID:</span> {request._id}
               </div>
               <div>
-                <span className="font-medium">Title:</span> {request.name}
+                <span className="font-medium">Title:</span> {request.task_name}
               </div>
               <div>
-                <span className="font-medium">Category:</span> {request.category}
+                <span className="font-medium">Category:</span> {request.department}
               </div>
               <div>
                 <span className="font-medium">Priority:</span> {request.priority}
@@ -204,7 +129,7 @@ const Assigned = () => {
             <h3 className="text-lg font-semibold mb-4">Completion Details</h3>
             <div className="space-y-3">
               <div>
-                <span className="font-medium">Requested By:</span> {request.reqby}
+                <span className="font-medium">Requested By:</span> {request.employee_email}
               </div>
               <div>
                 <span className="font-medium">Completion Date:</span> {request.completionDate}
@@ -221,20 +146,21 @@ const Assigned = () => {
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-4">Attached Documents</h3>
           <div className="grid grid-cols-2 gap-4">
-            {request.documents.map((doc, index) => (
+            documents come here
+            {/* {request.documents.map((doc, index) => (
               <div key={index} className="flex items-center p-3 border rounded-lg">
                 <div className="flex-1">
                   <p className="font-medium">{doc.name}</p>
                   <p className="text-sm text-gray-500">{doc.type}</p>
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
 
         <div className="mb-6">
           <h3 className="text-lg font-semibold mb-4">Additional Notes</h3>
-          <p className="text-gray-700">{request.additionalNotes}</p>
+          <p className="text-gray-700">{request.additional_notes}</p>
         </div>
 
         <div className="flex justify-end gap-4">
@@ -300,13 +226,13 @@ const Assigned = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredRequests.map(request => (
+            {requests.map(request => (
               <tr key={request.id} className="border-b text-center">
-                <td className="px-4 py-2">{request.id}</td>
-                <td className="px-4 py-2">{request.name}</td>
+                <td className="px-4 py-2">{request._id}</td>
+                <td className="px-4 py-2">{request.task_name}</td>
                 <td className="px-4 py-2">{request.date}</td>
-                <td className="px-4 py-2">{request.reqby}</td>
-                <td className="px-4 py-2">{request.category}</td>
+                <td className="px-4 py-2">{request.employee_email}</td>
+                <td className="px-4 py-2">{request.department}</td>
                 <td className={`px-4 py-2 ${getStatusClass(request.status)}`}>{request.status}</td>
                 <td className="px-4 py-2">
                   <div className="flex flex-col items-center gap-2">

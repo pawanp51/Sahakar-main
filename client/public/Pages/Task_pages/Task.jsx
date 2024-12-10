@@ -7,11 +7,13 @@ import { useTaskContext } from '../../ContextApi/TaskContext';
 const Task = () => {
   const {selectedtask} = useTaskContext();
   const navigate = useNavigate();
-  const [files, setfiles] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
   const [fetchfiles,setfetchfiles]= useState([]);
+  const [res_details,setres_details] = useState("");
+  const [res_notes,setres_notes] = useState("");
+  const [res_files,setres_files] = useState([]);
   const handleFileChange = (event) => {
-    setfiles([...event.target.files]); // Spread the FileList into an array
+    setres_files([...event.target.files]); // Spread the FileList into an array
   };
 
   const handleCancel = () => {
@@ -23,10 +25,10 @@ const Task = () => {
     // Handle file upload or text submission
 
     const formData = new FormData();
-    Array.from(files).forEach(file => {
+    Array.from(res_files).forEach(file => {
       formData.append('files', file);  // Append files under the 'files' field name
     });
-    formData.append("taskId", selectedtask.task_id);
+    formData.append("task_id", selectedtask._id);
     formData.append("to","manager");
 
     try {
@@ -36,14 +38,28 @@ const Task = () => {
         },
       });
 
-
-
       alert('File uploaded successfully');
       console.log(response);
+
+      const res = await fetch('http://localhost:3000/tasks/completetask',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ task_id: selectedtask._id ,
+                                res_details,
+                                res_notes
+         }),
+      })
+
+
     } catch (error) {
       console.error('Error uploading file:', error);
       alert('Error uploading file');
     } 
+
+
+
     // console.log(Files);
   };
 
@@ -197,6 +213,7 @@ const Task = () => {
                   className="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-gray-500 focus:border-gray-500"
                   placeholder="Enter your detailed response..."
                   required
+                  onChange={(e)=>{setres_details(e.target.value)}}
                 ></textarea>
               </div>
 
@@ -207,6 +224,7 @@ const Task = () => {
                   rows="2"
                   className="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-gray-500 focus:border-gray-500"
                   placeholder="Any additional notes or comments..."
+                  onChange={(e)=>{setres_notes(e.target.value)}}
                 ></textarea>
               </div>
 

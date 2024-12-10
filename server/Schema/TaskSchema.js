@@ -60,7 +60,15 @@ const taskSchema = new mongoose.Schema({
       references: {
         type: String,
         default: ''
-      }
+      },
+      res_details: {
+        type: String,
+        default: ''
+      },
+      res_notes: {
+        type: String,
+        default: ''
+      },
     
 });
 

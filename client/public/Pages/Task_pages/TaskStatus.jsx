@@ -7,7 +7,7 @@ const StatusTaskTable = ({tasks}) => {
   const navigate = useNavigate();
   const { user } = useLoginContext();
 const task_status = tasks.filter((task)=>{return task.employee_email === user.Email});
-console.log(tasks);
+// console.log(tasks);
 
   return (
     <div className="p-4 sm:p-6 bg-gray-100 min-h-screen">
@@ -52,15 +52,15 @@ console.log(tasks);
             <tbody>
               {tasks.map((task) => (
                 <tr key={task.id} className="border-t">
-                  <td className="px-4 py-2">{task.id}</td>
-                  <td className="px-4 py-2">{task.name}</td>
+                  <td className="px-4 py-2">{task._id}</td>
+                  <td className="px-4 py-2">{task.task_name}</td>
                   <td className="px-4 py-2">{task.date}</td>
-                  <td className="px-4 py-2">{task.assignedBy}</td>
+                  <td className="px-4 py-2">{task.assigned_by}</td>
                   <td className="px-4 py-2">{task.department}</td>
                   <td className="px-4 py-2">
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      task.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                      task.status === 'Completed' ? 'bg-green-100 text-green-800' :
+                      task.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                      task.status === 'completed' ? 'bg-green-100 text-green-800' :
                       task.status === 'Declined' ? 'bg-red-800 text-white' :
                       task.status === 'Approved' ? 'bg-green-500 text-green-800' :
                       'bg-gray-100 text-gray-800' 
@@ -73,7 +73,7 @@ console.log(tasks);
                       <div className="text-red-500 text-sm">
                         <p>Reason: {task.reason}</p>
                       </div>
-                    ) : task.status === 'Pending' ? (
+                    ) : task.status === 'pending' ? (
                       <button
                         onClick={() => navigate('/Task')}
                         className="px-4 py-2 bg-blue-600 text-white rounded-md"

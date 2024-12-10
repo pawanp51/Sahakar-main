@@ -1,6 +1,8 @@
 const express = require('express');
 const taskrouter = express.Router();
 const db = require("../Schema/TaskSchema");
+const { ObjectId } = require('mongodb');
+
 
 // task route
 taskrouter.route("/").post(async (req, res) => {
@@ -54,7 +56,9 @@ taskrouter.route("/assigntask").post(async(req,res)=>{
             deadline,
             description,
             additional_notes:additionalNotes,
-            references
+            references,
+            res_details:"",
+            res_notes:""
         })
        const saved_task =  await task.save();
         console.log("Task saved successfully:", task);
@@ -65,4 +69,23 @@ taskrouter.route("/assigntask").post(async(req,res)=>{
     }
 
 })
+
+taskrouter.route("/completetask").post(async(req,res)=>{
+    try{
+        const {task_id,res_details,res_notes} = req.body;
+        console.log("Task details:", task_id, res_notes,res_details);
+        const updated = await  db.findOneAndUpdate(
+            { _id: new ObjectId(task_id) }, // Correctly construct ObjectId
+            { $set: { res_details:res_details, res_notes:res_notes, status:"completed" } }, // Update
+            { returnDocument: "after" , writeConcern: { w: "majority" }} // Options (return the updated document)
+          );
+          console.log("updated:",updated);
+          
+        res.status(200).json("Task updated successfully");
+    }catch(error){
+        console.error("Error updating task:", error);
+        res.status(500).json("Server error");
+    }
+})
+
 module.exports = taskrouter;
