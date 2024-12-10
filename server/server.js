@@ -5,7 +5,8 @@ app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 //mongodb
 const mongoose = require('mongoose');
-mongoose.connect("mongodb+srv://pranav976:pranav976@cluster0.dmqfq.mongodb.net/",{
+mongoose.connect("mongodb+srv://pawan:pawanpatil51@cluster0.bzdcd.mongodb.net/",{
+  dbName:"Sahakar",
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })

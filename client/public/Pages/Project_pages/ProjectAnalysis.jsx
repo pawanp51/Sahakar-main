@@ -2,38 +2,13 @@ import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Briefcase, CheckSquare, Users, Clock } from 'lucide-react';
 import Navbar from './Navbar';
+import { useProjContext } from '../../ContextApi/ProjContext';
 
 const ProjectUpdateForm = () => {
+  const {projectdetails} = useProjContext();
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [timeRange, setTimeRange] = useState('Last 30 days');
 
-  const summaryData = [
-    { name: 'Phase', value: 2, total: 4, icon: Briefcase, color: '#10B981', change: 10 },
-    { name: 'Tasks', value: 15, total: 24, icon: CheckSquare, color: '#EF4444', change: -5 },
-    { name: 'Resources', value: 85, total: 90, icon: Users, color: '#3B82F6', change: 8 },
-    { name: 'Time Spent', value: 50, total: '?', icon: Clock, color: '#F59E0B', change: -3 },
-  ];
-
-  const projectData = [
-    { name: 'Parks and Recreation', status: 'Completed', progress: 100 },
-    { name: 'Public Works', status: 'On Track', progress: 60 },
-    { name: 'Environmental Protection', status: 'Delayed', progress: 30 },
-    { name: 'Budget Management', status: 'At Risk', progress: 20 },
-  ];
-
-  const milestoneData = [
-    { name: 'Project Initiation', status: 'Completed', progress: 100 },
-    { name: 'Design Phase', status: 'On Track', progress: 80 },
-    { name: 'Construction Start', status: 'Delayed', progress: 50 },
-    { name: 'Environmental Impact Assessment', status: 'At Risk', progress: 40 },
-  ];
-
-  const overallProgress = 70;
-  const progressBreakdown = [
-    { name: 'Completed', value: 15, color: '#10B981' },
-    { name: 'In Progress', value: 5, color: '#3B82F6' },
-    { name: 'Delayed', value: 4, color: '#F59E0B' },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -61,7 +36,7 @@ const ProjectUpdateForm = () => {
 </header>
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-{summaryData.map((item) => (
+{projectdetails.summaryData.map((item) => (
   <div key={item.name} className="bg-white p-4 rounded-lg shadow">
     <div className="flex items-center justify-between mb-2">
       <span className="text-sm text-gray-500">{item.name}</span>
@@ -91,7 +66,7 @@ const ProjectUpdateForm = () => {
         </tr>
       </thead>
       <tbody>
-        {projectData.map((project) => (
+        {projectdetails.projectData.map((project) => (
           <tr key={project.name} className="border-t">
             <td className="py-2">{project.name}</td>
             <td className="py-2">
@@ -115,11 +90,11 @@ const ProjectUpdateForm = () => {
 </div>
 
 <div className="bg-white p-4 rounded-lg shadow">
-  <h2 className="text-lg font-semibold mb-4">Overall Progress</h2>
+  <h2 className="text-lg font-semibold mb-4"> Progress</h2>
   <div className="flex items-center justify-between">
-
+Overall
   <div>
-      {progressBreakdown.map((item) => (
+      {projectdetails.progressBreakdown.map((item) => (
         <div key={item.name} className="flex items-center mb-1">
           <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: item.color }}></div>
           <span className="text-sm">
@@ -130,13 +105,13 @@ const ProjectUpdateForm = () => {
     </div>
 
     <div className="text-center">
-      <div className="text-4xl font-bold text-blue-600">{overallProgress}%</div>
+      <div className="text-4xl font-bold text-blue-600">{projectdetails.overallProgress}%</div>
       <div className="text-sm text-gray-500">Completed</div>
     </div>
 
     <PieChart width={180} height={180}>
       <Pie
-        data={progressBreakdown}
+        data={projectdetails.progressBreakdown}
         cx={80}
         cy={80}
         innerRadius={60}
@@ -144,7 +119,7 @@ const ProjectUpdateForm = () => {
         paddingAngle={5}
         dataKey="value"
       >
-        {progressBreakdown.map((entry, index) => (
+        {projectdetails.progressBreakdown.map((entry, index) => (
           <Cell key={`cell-${index}`} fill={entry.color} />
         ))}
       </Pie>
@@ -167,7 +142,7 @@ const ProjectUpdateForm = () => {
       </tr>
     </thead>
     <tbody>
-      {milestoneData.map((milestone) => (
+      {projectdetails.milestoneData.map((milestone) => (
         <tr key={milestone.name} className="border-t">
           <td className="py-2">{milestone.name}</td>
           <td className="py-2">
@@ -260,9 +235,9 @@ const ProjectUpdateForm = () => {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                  {['Parks & Recreation', 'Public Works', 'Environmental Protection', 'Budget Management'].map((section) => (
+                  {projectdetails.projectData.map((section) => (
                     <div key={section} className="bg-gray-50 p-6 rounded-lg">
-                      <h3 className="text-lg font-bold text-gray-800 mb-4">{section}</h3>
+                      <h3 className="text-lg font-bold text-gray-800 mb-4">{section.name}</h3>
                       <div className="space-y-4">
                         <div>
                           <label className="block text-gray-700 font-medium mb-2">Status</label>
