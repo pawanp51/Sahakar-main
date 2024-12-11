@@ -30,7 +30,11 @@ import Expense from '../public/Pages/Project_pages/Expense.jsx';
 import OfficeBudget from '../public/Pages/Project_pages/OfficeBudget.jsx';
 import Staff from '../public/Pages/Staff.jsx';  // Corrected import path
 import DisasterManagement from '../public/Pages/Project_pages/DisasterManagement.jsx';  // Corrected import path
-
+import GISinit from '../public/Pages/GIS_pages/GISinit.jsx';
+import GISreq from '../public/Pages/GIS_pages/GISreq.jsx';
+import IncGISreq from '../public/Pages/GIS_pages/IncGISreq.jsx';
+import CreateGIS from '../public/Pages/GIS_pages/CreateGIS.jsx';
+import receivedGIS from '../public/Pages/GIS_pages/receivedGIS.jsx';
 
 import '../src/App.css';
 import ScheduleMeeting from '../public/Components/ScheduleMeeting.jsx';
@@ -73,8 +77,11 @@ const App = () => {
           <Route path="/ScheduleMeeting" element={<ScheduleMeeting />} />
           <Route path="/Staff" element={<Staff />} />
           <Route path="/DisasterManagement" element={<DisasterManagement />} />
-
-          
+          <Route path="/GISreq" element={<GISreq />} />
+          <Route path="/IncGISreq" element={<IncGISreq/>} />
+          <Route path="/create-gis" element={<CreateGIS />} />
+          <Route path='/GISinit' element={<GISinit/>} />
+          <Route path='/ReceivedGIS' element={<receivedGIS />} />
         </Routes>
       
     </>

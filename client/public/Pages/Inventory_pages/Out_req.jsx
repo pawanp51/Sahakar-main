@@ -1,239 +1,237 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useLoginContext } from '../../ContextApi/Logincontext';
 
 const Out_req = () => {
-  const [department, setDepartment] = useState('');
-  const [resourceName, setResourceName] = useState('');
-  const [resourceCategory, setResourceCategory] = useState('');
-  const [location, setLocation] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const { user } = useLoginContext();
+  const [files, setFiles] = useState([]);
+  const [formData, setFormData] = useState({
+    request_email: '',
+    date: '',
+    department: '',
+    inventory: '',
+    status: 'pending',
+    deadline: '',
+    description: '',
+    additionalNotes: '',
+  });
 
-  const [departments, setDepartments] = useState([
-    'Electricity Department',
-    'Gas Supply Department',
-    'Civil Department',
-    'Public Works Department',
-    'Construction',
-    'Sanitation Department',
-    'Emergency Services',
-    'Urban Planning',
-  ]);
-
-  const [resourceItems, setResourceItems] = useState([
-    'Generator',
-    'Transformer',
-    'Street Light',
-    'Excavator',
-    'Concrete Mixer',
-    'Dump Truck',
-    'Water Pump',
-    'Drill Machine',
-    'Road Roller',
-    'Scaffolding',
-  ]);
-
-  const [categories, setCategories] = useState([
-    'Office Supplies',
-    'Electronics',
-    'Furniture',
-    'Tools',
-    'Vehicles',
-  ]);
-
-  const [newDepartment, setNewDepartment] = useState('');
-  const [newResourceName, setNewResourceName] = useState('');
-  const [newCategory, setNewCategory] = useState('');
-
-  const handleAddDepartment = () => {
-    if (newDepartment.trim() && !departments.includes(newDepartment)) {
-      setDepartments([...departments, newDepartment]);
-      setNewDepartment('');
-    }
+  const departmentInventories = {
+    Electricity: ['Transformers', 'Generators', 'Cables'],
+    Gas: ['Pipelines', 'Meters', 'Valves'],
+    Road: ['Concrete Mixers', 'Bulldozers', 'Signboards'],
+    Oil: ['Tanks', 'Pumps', 'Refinery Tools'],
   };
 
-  const handleAddResourceName = () => {
-    if (newResourceName.trim() && !resourceItems.includes(newResourceName)) {
-      setResourceItems([...resourceItems, newResourceName]);
-      setNewResourceName('');
-    }
+  const handleFileChange = (event) => {
+    setFiles([...event.target.files]); // Spread the FileList into an array
   };
 
-  const handleAddCategory = () => {
-    if (newCategory.trim() && !categories.includes(newCategory)) {
-      setCategories([...categories, newCategory]);
-      setNewCategory('');
-    }
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logic to handle form submission
-    console.log({
-      department,
-      resourceName,
-      resourceCategory,
-      location,
-      startDate, // Include start date in the submitted data
-      endDate,   // Include end date in the submitted data
-    });
+    console.log(formData);
+
+    try {
+      // Submit the form data
+      const { data } = await axios.post('http://localhost:3000/inventory/requestinventory', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      alert('Request created successfully');
+      console.log('Request Response:', data);
+
+      // Submit the files
+      if (files.length > 0) {
+        const fileData = new FormData();
+        Array.from(files).forEach((file) => {
+          fileData.append('files', file);
+        });
+        fileData.append('request_id', data.id); // Assuming `id` is returned from the form submission
+        fileData.append('to', 'employee');
+
+        const fileResponse = await axios.post('http://localhost:3000/upload', fileData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        alert('Files uploaded successfully');
+        console.log('File Upload Response:', fileResponse.data);
+      }
+    } catch (error) {
+      console.error('Error:', error.response || error.message);
+      alert('Error creating request or uploading file');
+    }
   };
 
   return (
-    <div className="mx-auto p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-8 text-blue-700">Request Resources for Interdepartmental Use</h1>
+    <div className="w-full max-w-5xl mx-auto p-6 bg-white rounded-lg border-2 border-black">
+      <h1 className="text-3xl font-bold text-center mb-6">Request for Interdepartmental Resources</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md border border-gray-300">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="request_email" className="block mb-1 font-medium">
+            Request Email:
+          </label>
+          <input
+            type="email"
+            id="request_email"
+            value={formData.request_email}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="department">Department</label>
+        <div>
+          <label htmlFor="date" className="block mb-1 font-medium">
+            Date:
+          </label>
+          <input
+            type="date"
+            id="date"
+            value={formData.date}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="department" className="block mb-1 font-medium">
+            Department:
+          </label>
           <select
             id="department"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
+            value={formData.department}
+            onChange={(e) => {
+              handleChange(e);
+              setFormData((prevData) => ({
+                ...prevData,
+                inventory: '',
+              }));
+            }}
             required
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Select Department</option>
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>{dept}</option>
+            {Object.keys(departmentInventories).map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
             ))}
-            <option value="add-new-department">Add New Department</option>
           </select>
-          {department === 'add-new-department' && (
-            <div className="mt-2">
-              <input
-                type="text"
-                placeholder="Add new department"
-                value={newDepartment}
-                onChange={(e) => setNewDepartment(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <button
-                type="button"
-                onClick={handleAddDepartment}
-                className="mt-2 bg-green-500 text-white py-2 px-4 rounded-lg"
-              >
-                Add Department
-              </button>
-            </div>
-          )}
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="resourceName">Resource Name</label>
+        {formData.department && (
+          <div>
+            <label htmlFor="inventory" className="block mb-1 font-medium">
+              Inventory:
+            </label>
+            <select
+              id="inventory"
+              value={formData.inventory}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select Inventory</option>
+              {departmentInventories[formData.department].map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div>
+          <label htmlFor="status" className="block mb-1 font-medium">
+            Status:
+          </label>
           <select
-            id="resourceName"
-            value={resourceName}
-            onChange={(e) => setResourceName(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
+            id="status"
+            value={formData.status}
+            onChange={handleChange}
             required
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select Resource</option>
-            {resourceItems.map((item) => (
-              <option key={item} value={item}>{item}</option>
-            ))}
-            <option value="add-new-resource">Add New Resource</option>
+            <option value="pending">Pending</option>
+            <option value="inProgress">In Progress</option>
+            <option value="completed">Completed</option>
           </select>
-          {resourceName === 'add-new-resource' && (
-            <div className="mt-2">
-              <input
-                type="text"
-                placeholder="Add new resource"
-                value={newResourceName}
-                onChange={(e) => setNewResourceName(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <button
-                type="button"
-                onClick={handleAddResourceName}
-                className="mt-2 bg-green-500 text-white py-2 px-4 rounded-lg"
-              >
-                Add Resource
-              </button>
-            </div>
-          )}
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="resourceCategory">Resource Category</label>
-          <select
-            id="resourceCategory"
-            value={resourceCategory}
-            onChange={(e) => setResourceCategory(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-            <option value="add-new-category">Add New Category</option>
-          </select>
-          {resourceCategory === 'add-new-category' && (
-            <div className="mt-2">
-              <input
-                type="text"
-                placeholder="Add new category"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <button
-                type="button"
-                onClick={handleAddCategory}
-                className="mt-2 bg-green-500 text-white py-2 px-4 rounded-lg"
-              >
-                Add Category
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="location">Location</label>
+        <div>
+          <label htmlFor="deadline" className="block mb-1 font-medium">
+            Deadline:
+          </label>
           <input
-            id="location"
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
-            placeholder="Enter Location"
+            type="datetime-local"
+            id="deadline"
+            value={formData.deadline}
+            onChange={handleChange}
             required
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="startDate">Start Date</label>
-          <input
-            id="startDate"
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
+        <div>
+          <label htmlFor="description" className="block mb-1 font-medium">
+            Description:
+          </label>
+          <textarea
+            id="description"
+            value={formData.description}
+            onChange={handleChange}
             required
+            rows="4"
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 resize-none"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="endDate">End Date</label>
-          <input
-            id="endDate"
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2"
-            required
+        <div>
+          <label htmlFor="additionalNotes" className="block mb-1 font-medium">
+            Additional Notes:
+          </label>
+          <textarea
+            id="additionalNotes"
+            value={formData.additionalNotes}
+            onChange={handleChange}
+            rows="3"
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 resize-none"
           />
         </div>
 
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
-          >
-            Submit 
-          </button>
+        <div>
+          <label htmlFor="files" className="block mb-1 font-medium">
+            Attach Files:
+          </label>
+          <input
+            type="file"
+            id="files"
+            multiple
+            onChange={handleFileChange}
+            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+          />
         </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 mt-6"
+        >
+          Create Request
+        </button>
       </form>
     </div>
   );
