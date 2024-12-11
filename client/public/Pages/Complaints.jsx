@@ -6,7 +6,7 @@ const Complaints = () => {
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [forwardedComplaints, setForwardedComplaints] = useState([]);
-  const [activeTab, setActiveTab] = useState('complaints'); // Tracks active tab
+  const [activeTab, setActiveTab] = useState('complaints');
 
   const departments = ['Road Transport', 'Water', 'Civil', 'Electrical', 'Mechanical'];
 
@@ -45,12 +45,12 @@ const Complaints = () => {
   };
 
   return (
-    <div className="mx-auto p-6 bg-gray-100 min-h-screen">
+    <div className="mx-auto p-4 bg-gray-100 min-h-screen">
       {/* Tabs Section */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex gap-4 mb-4 justify-center">
         <button
           onClick={() => setActiveTab('complaints')}
-          className={`p-3 rounded-md ${
+          className={`p-2 w-full max-w-xs rounded-md text-sm md:text-base ${
             activeTab === 'complaints' ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-700'
           }`}
         >
@@ -58,7 +58,7 @@ const Complaints = () => {
         </button>
         <button
           onClick={() => setActiveTab('forwarded')}
-          className={`p-3 rounded-md ${
+          className={`p-2 w-full max-w-xs rounded-md text-sm md:text-base ${
             activeTab === 'forwarded' ? 'bg-blue-700 text-white' : 'bg-gray-300 text-gray-700'
           }`}
         >
@@ -69,40 +69,40 @@ const Complaints = () => {
       {/* Complaints Section */}
       {activeTab === 'complaints' && (
         <div>
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-2 mb-4">
             <input
               type="text"
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border rounded-md p-3 flex-1 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border rounded-md p-2 w-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <IoSearchSharp size={30} className="cursor-pointer text-blue-700 hover:text-blue-600" />
+            <IoSearchSharp size={24} className="cursor-pointer text-blue-700 hover:text-blue-600" />
           </div>
           <div className="overflow-x-auto shadow-md rounded-lg">
-            <table className="table-auto min-w-full text-left bg-white">
-              <thead className="bg-gradient-to-r from-blue-700 to-blue-900 text-white">
-                <tr className="h-16">
-                  <th className="px-4 py-2 text-center">C-id</th>
-                  <th className="px-4 py-2 text-center">Name</th>
-                  <th className="px-4 py-2 text-center">Subject</th>
-                  <th className="px-4 py-2 text-center">Date</th>
-                  <th className="px-4 py-2 text-center">Location</th>
-                  <th className="px-4 py-2 text-center">Forward</th>
+            <table className="table-auto w-full text-sm md:text-base">
+              <thead className="bg-blue-700 text-white">
+                <tr>
+                  <th className="px-2 py-2 text-center">C-id</th>
+                  <th className="px-2 py-2 text-center">Name</th>
+                  <th className="px-2 py-2 text-center">Subject</th>
+                  <th className="px-2 py-2 text-center">Date</th>
+                  <th className="px-2 py-2 text-center">Location</th>
+                  <th className="px-2 py-2 text-center">Forward</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredComplaints.map((complaint) => (
-                  <tr key={complaint.id} className="border-b hover:bg-gray-100 transition-all duration-150">
-                    <td className="px-4 py-2 text-center">{complaint.id}</td>
-                    <td className="px-4 py-2 text-center">{complaint.name}</td>
-                    <td className="px-4 py-2 text-center">{complaint.subject}</td>
-                    <td className="px-4 py-2 text-center">{complaint.date}</td>
-                    <td className="px-4 py-2 text-center">{complaint.location}</td>
-                    <td className="px-4 py-2 text-center">
+                  <tr key={complaint.id} className="border-b hover:bg-gray-100">
+                    <td className="px-2 py-2 text-center">{complaint.id}</td>
+                    <td className="px-2 py-2 text-center">{complaint.name}</td>
+                    <td className="px-2 py-2 text-center">{complaint.subject}</td>
+                    <td className="px-2 py-2 text-center">{complaint.date}</td>
+                    <td className="px-2 py-2 text-center">{complaint.location}</td>
+                    <td className="px-2 py-2 text-center">
                       <button
                         onClick={() => handleForwardClick(complaint)}
-                        className="border rounded-md p-2 px-4 bg-green-100 text-green-700 hover:bg-green-200 transition-all"
+                        className="border rounded-md p-2 bg-green-100 text-green-700 hover:bg-green-200"
                       >
                         Forward
                       </button>
@@ -118,29 +118,29 @@ const Complaints = () => {
       {/* Forwarded Complaints Section */}
       {activeTab === 'forwarded' && (
         <div className="overflow-x-auto shadow-md rounded-lg">
-          <table className="table-auto min-w-full text-left bg-white">
-            <thead className="bg-gradient-to-r from-green-700 to-green-900 text-white">
-              <tr className="h-16">
-                <th className="px-4 py-2 text-center">F-id</th>
-                <th className="px-4 py-2 text-center">Name</th>
-                <th className="px-4 py-2 text-center">Subject</th>
-                <th className="px-4 py-2 text-center">Date</th>
-                <th className="px-4 py-2 text-center">Location</th>
-                <th className="px-4 py-2 text-center">Forwarded To</th>
+          <table className="table-auto w-full text-sm md:text-base">
+            <thead className="bg-green-700 text-white">
+              <tr>
+                <th className="px-2 py-2 text-center">F-id</th>
+                <th className="px-2 py-2 text-center">Name</th>
+                <th className="px-2 py-2 text-center">Subject</th>
+                <th className="px-2 py-2 text-center">Date</th>
+                <th className="px-2 py-2 text-center">Location</th>
+                <th className="px-2 py-2 text-center">Forwarded To</th>
               </tr>
             </thead>
             <tbody>
               {forwardedComplaints.map((complaint) => (
-                <tr key={complaint.id} className="border-b hover:bg-gray-100 transition-all duration-150">
-                  <td className="px-4 py-2 text-center">{complaint.id}</td>
-                  <td className="px-4 py-2 text-center">{complaint.name}</td>
-                  <td className="px-4 py-2 text-center">{complaint.subject}</td>
-                  <td className="px-4 py-2 text-center">{complaint.date}</td>
-                  <td className="px-4 py-2 text-center">{complaint.location}</td>
-                  <td className="px-4 py-2 text-center">{complaint.forwardedTo}</td>
+                <tr key={complaint.id} className="border-b hover:bg-gray-100">
+                  <td className="px-2 py-2 text-center">{complaint.id}</td>
+                  <td className="px-2 py-2 text-center">{complaint.name}</td>
+                  <td className="px-2 py-2 text-center">{complaint.subject}</td>
+                  <td className="px-2 py-2 text-center">{complaint.date}</td>
+                  <td className="px-2 py-2 text-center">{complaint.location}</td>
+                  <td className="px-2 py-2 text-center">{complaint.forwardedTo}</td>
                 </tr>
               ))}
-            </tbody>
+            </tbody>  
           </table>
         </div>
       )}
@@ -148,8 +148,8 @@ const Complaints = () => {
       {/* Forward Modal */}
       {showForwardModal && selectedComplaint && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h3 className="text-xl font-semibold mb-4">Forward Complaint</h3>
+          <div className="bg-white p-6 rounded-lg w-11/12 max-w-md">
+            <h3 className="text-lg md:text-xl font-semibold mb-4">Forward Complaint</h3>
             <div>
               <p><strong>Name:</strong> {selectedComplaint.name}</p>
               <p><strong>Subject:</strong> {selectedComplaint.subject}</p>
@@ -157,13 +157,13 @@ const Complaints = () => {
               <p><strong>Location:</strong> {selectedComplaint.location}</p>
             </div>
             <div className="mt-4">
-              <h4 className="text-lg font-semibold mb-2">Forward to:</h4>
-              <div className="flex flex-col">
+              <h4 className="text-base md:text-lg font-semibold mb-2">Forward to:</h4>
+              <div className="flex flex-col gap-2">
                 {departments.map((dept) => (
                   <button
                     key={dept}
                     onClick={() => handleForwardSubmit(dept)}
-                    className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 mb-2"
+                    className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
                   >
                     {dept}
                   </button>
