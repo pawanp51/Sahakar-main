@@ -34,7 +34,9 @@ import GISinit from '../public/Pages/GIS_pages/GISinit.jsx';
 import GISreq from '../public/Pages/GIS_pages/GISreq.jsx';
 import IncGISreq from '../public/Pages/GIS_pages/IncGISreq.jsx';
 import CreateGIS from '../public/Pages/GIS_pages/CreateGIS.jsx';
-import receivedGIS from '../public/Pages/GIS_pages/receivedGIS.jsx';
+import ReceivedGIS from '../public/Pages/GIS_pages/receivedGIS.jsx';
+import MarkingGeotag from '../public/Pages/Project_pages/markingGeotag.jsx';
+import Conflict from '../public/Pages/Project_pages/conflict.jsx';
 
 import '../src/App.css';
 import ScheduleMeeting from '../public/Components/ScheduleMeeting.jsx';
@@ -81,7 +83,10 @@ const App = () => {
           <Route path="/IncGISreq" element={<IncGISreq/>} />
           <Route path="/create-gis" element={<CreateGIS />} />
           <Route path='/GISinit' element={<GISinit/>} />
-          <Route path='/ReceivedGIS' element={<receivedGIS />} />
+          <Route path='/receivedGIS' element={<ReceivedGIS />} />
+          <Route path='/markGeotag' element={<MarkingGeotag />} />
+          <Route path='/conflict' element={<Conflict />} />
+          
         </Routes>
       
     </>

@@ -8,6 +8,8 @@ const GISRequest = require('./Schema/GISrequest');
 // const InventoryRequest = require('./Schema/InventoryRequest');
 const Complaints = require('./Schema/Complaints');
 const GISmap = require('./Schema/GISmap');
+const GISRequestAccept = require('./Schema/GISrequestaccept');
+const Points = require('./Schema/Points');
 
 const app = express();
 
@@ -44,10 +46,12 @@ mongoose.connect("mongodb+srv://pawan:pawanpatil51@cluster0.bzdcd.mongodb.net/",
   const projectrouter = require('./router/project');
   const taskrouter = require('./router/task');
   const getfilesrouter = require('./router/file');
+  const pointRouter = require('./router/pointRouter')
   app.use("/",loginrouter)
   app.use("/projects",projectrouter);
   app.use("/tasks",taskrouter);
   app.use("/getfiles",getfilesrouter);
+  app.use("/api/points", pointRouter);
 
   // file handling
 const multer = require('multer');
@@ -363,17 +367,41 @@ app.put('/api/complaints/:id', async (req, res) => {
   }
 });
 
-app.post('/api/send-coordinates', (req, res) => {
+app.post('/api/send-coordinates', async (req, res) => {
   const { coordinates, email } = req.body;
 
   if (!coordinates || !email) {
     return res.status(400).json({ message: 'Coordinates and email are required.' });
   }
 
-  console.log('Received coordinates:', coordinates);
-  console.log('Requestor email:', email);
+  try {
+    const newRequest = new GISRequestAccept({ coordinates, email });
+    await newRequest.save();
+    res.status(200).json({ message: 'Coordinates and email saved successfully.' });
+  } catch (err) {
+    console.error('Error saving request:', err);
+    res.status(500).json({ message: 'Failed to save request.', error: err.message });
+  }
+});
 
-  res.status(200).json({ message: 'Coordinates and email received successfully.' });
+app.get('/api/send-coordinates/:email', async (req, res) => {
+  const { email } = req.params;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required.' });
+  }
+
+  try {
+    if (email === 'pranav.patil221@pccoepune.org') {
+      const data = await GISRequestAccept.find({ email });
+      return res.status(200).json({ message: 'Data retrieved successfully.', data });
+    } else {
+      return res.status(404).json({ message: 'No data found for this email.' });
+    }
+  } catch (err) {
+    console.error('Error retrieving data:', err);
+    res.status(500).json({ message: 'Failed to retrieve data.', error: err.message });
+  }
 });
 
 

@@ -93,7 +93,7 @@ const TaskTable = ({tasks}) => {
     const pendingTask = useMemo(() => {
       if (!user) return [];
       return tasks.filter(
-        (task) => task.status === 'pending' && task.employee_email === user.Email
+        (task) => task.status === 'pending' 
       );
     }, [tasks]);
     console.log("Pending task",pendingTask)
@@ -210,7 +210,7 @@ const TaskManager = () => {
   const {user , checklogin} = useLoginContext();
   const [loading,setloading] = useState(false);
   useEffect(() => {
-
+    // alert("Incoming conflict request(High priority)")
     const fetchUserAndTasks = async () => {
       setloading(true); // Show loading state while fetching data
       if (!user) {
@@ -233,8 +233,8 @@ const TaskManager = () => {
 
     if(!user) return;
       
-      console.log("gettasks");
-      console.log("in gettask user is",user);
+      // console.log("gettasks");
+      // console.log("in gettask user is",user);
       
       
     const response = await fetch("http://localhost:3000/tasks",{
@@ -242,7 +242,7 @@ const TaskManager = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({email:user.Email})
+      body: JSON.stringify({email:user.Email,department:user.department})
 
     });
     const res = await response.json();

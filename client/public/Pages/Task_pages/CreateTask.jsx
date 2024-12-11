@@ -20,6 +20,7 @@ const CreateTask = () => {
     description: '',
     additionalNotes: '',
     references: '',
+    type:"NA",
   });
 
   const handleFileChange = (event) => {

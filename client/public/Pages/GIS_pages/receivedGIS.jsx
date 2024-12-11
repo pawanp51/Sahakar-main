@@ -3,21 +3,22 @@ import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 
-const receivedGIS = ({ email }) => {
+const ReceivedGIS = () => {
   const [gisMaps, setGISMaps] = useState([]);
 
   useEffect(() => {
     const fetchGISMaps = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/gis-maps/${email}`);
-        setGISMaps(response.data);
+        const response = await axios.get(`http://localhost:3000/api/send-coordinates/pranav.patil221@pccoepune.org`);
+        setGISMaps(response.data.data);
       } catch (err) {
         console.error('Error fetching GIS maps:', err.response?.data || err.message);
       }
     };
-
+  
     fetchGISMaps();
-  }, [email]);
+  }, []);
+  
 
   return (
     <div className="p-6">
@@ -61,4 +62,4 @@ const receivedGIS = ({ email }) => {
   );
 };
 
-export default receivedGIS;
+export default ReceivedGIS;

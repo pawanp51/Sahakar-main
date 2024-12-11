@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Upload, X, Plus, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { usegeotagContext } from '../../ContextApi/geotagcontext';
 
 const CreateProjectForm = () => {
+  const {setprojdata} = usegeotagContext();
   const [files, setFiles] = useState([]);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     projectTitle: '',
     projectType: '',
@@ -17,7 +21,7 @@ const CreateProjectForm = () => {
     keyStakeholders: '',
     estimatedBudget: '',
     fundingSource: '',
-    manpowerRequired: '',
+    manpower: '',
     keyEquipment: '',
     latitude: '',
     longitude: '',
@@ -32,18 +36,22 @@ const CreateProjectForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/api/projectcreation', formData);
-      console.log(response.data);
-      alert('Project created successfully!');
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.message) {
-        alert(error.response.data.message);
-      } else {
-        console.error('Error creating project:', error);
-        alert('Failed to create project');
-      }
-    }
+    // try {
+    //   const response = await axios.post('http://localhost:3000/api/projectcreation', formData);
+    //   console.log(response.data);
+    //   alert('Project created successfully!');
+    // } catch (error) {
+    //   if (error.response && error.response.data && error.response.data.message) {
+    //     alert(error.response.data.message);
+    //   } else {
+    //     console.error('Error creating project:', error);
+    //     alert('Failed to create project');
+    //   }
+    // }
+
+    setprojdata(formData);
+    navigate('/markGeotag');
+
   };
 
   const handleFileChange = (e) => {
@@ -65,7 +73,7 @@ const CreateProjectForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="projectTitle" className="block text-sm font-medium text-gray-700">Project Title</label>
-              <input onChange={handleChange} value={formData.projectTitle} type="text" id="projectTitle" name="projectTitle" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.projectTitle} type="text" id="projectTitle" name="projectTitle" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
               <label htmlFor="projectType" className="block text-sm font-medium text-gray-700">Project Type</label>
@@ -78,11 +86,11 @@ const CreateProjectForm = () => {
             </div>
             <div>
               <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date</label>
-              <input onChange={handleChange} value={formData.startDate} type="date" id="startDate" name="startDate" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.startDate} type="date" id="startDate" name="startDate" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
               <label htmlFor="estimatedEndDate" className="block text-sm font-medium text-gray-700">Estimated End Date</label>
-              <input onChange={handleChange} value={formData.estimatedEndDate} type="date" id="estimatedEndDate" name="estimatedEndDate" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.estimatedEndDate} type="date" id="estimatedEndDate" name="estimatedEndDate" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
           </div>
         </section>
@@ -93,15 +101,15 @@ const CreateProjectForm = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700">Project Description</label>
-              <textarea onChange={handleChange} value={formData.description} id="description" name="description" rows="3" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required></textarea>
+              <textarea onChange={handleChange} value={formData.description} id="description" name="description" rows="3" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" ></textarea>
             </div>
             <div>
               <label htmlFor="objectives" className="block text-sm font-medium text-gray-700">Project Objectives</label>
-              <textarea onChange={handleChange} value={formData.objectives} id="objectives" name="objectives" rows="3" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required></textarea>
+              <textarea onChange={handleChange} value={formData.objectives} id="objectives" name="objectives" rows="3" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" ></textarea>
             </div>
             <div>
               <label htmlFor="scope" className="block text-sm font-medium text-gray-700">Project Scope</label>
-              <textarea onChange={handleChange} value={formData.scope} id="scope" name="scope" rows="3" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required></textarea>
+              <textarea onChange={handleChange} value={formData.scope} id="scope" name="scope" rows="3" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" ></textarea>
             </div>
           </div>
         </section>
@@ -112,7 +120,7 @@ const CreateProjectForm = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="leadDepartment" className="block text-sm font-medium text-gray-700">Lead Department</label>
-              <input onChange={handleChange} value={formData.leadDepartment} type="text" id="leadDepartment" name="leadDepartment" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.leadDepartment} type="text" id="leadDepartment" name="leadDepartment" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
               <label htmlFor="otherDepartments" className="block text-sm font-medium text-gray-700">Other Involved Departments</label>
@@ -131,15 +139,15 @@ const CreateProjectForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="estimatedBudget" className="block text-sm font-medium text-gray-700">Estimated Budget (in INR)</label>
-              <input onChange={handleChange} value={formData.estimatedBudget} type="number" id="estimatedBudget" name="estimatedBudget" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.estimatedBudget} type="number" id="estimatedBudget" name="estimatedBudget" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
               <label htmlFor="fundingSource" className="block text-sm font-medium text-gray-700">Funding Source</label>
-              <input onChange={handleChange} value={formData.fundingSource} type="text" id="fundingSource" name="fundingSource" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.fundingSource} type="text" id="fundingSource" name="fundingSource" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
-              <label htmlFor="manpowerRequired" className="block text-sm font-medium text-gray-700">Estimated Manpower Required</label>
-              <input onChange={handleChange} value={formData.manpowerRequired} type="number" id="manpowerRequired" name="manpowerRequired" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <label htmlFor="manpower" className="block text-sm font-medium text-gray-700">Estimated Manpower </label>
+              <input onChange={handleChange} value={formData.manpower} type="number" id="manpower" name="manpower" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
               <label htmlFor="keyEquipment" className="block text-sm font-medium text-gray-700">Key Equipment/Resources</label>
@@ -153,11 +161,11 @@ const CreateProjectForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="estimatedBudget" className="block text-sm font-medium text-gray-700">Latitude</label>
-              <input onChange={handleChange} value={formData.latitude} placeholder='41.40338' type="text" id="latitude" name="latitude" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.latitude} placeholder='41.40338' type="text" id="latitude" name="latitude" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
             <div>
               <label htmlFor="fundingSource" className="block text-sm font-medium text-gray-700">Longitude</label>
-              <input onChange={handleChange} value={formData.longitude} placeholder='2.17403' type="text" id="longitude" name="longitude" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+              <input onChange={handleChange} value={formData.longitude} placeholder='2.17403' type="text" id="longitude" name="longitude" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  />
             </div>
           </div>
         </section>
@@ -167,7 +175,7 @@ const CreateProjectForm = () => {
           <h2 className="text-xl font-semibold mb-4">6. Milestones and Timeline</h2>
           <div>
             <label htmlFor="milestones" className="block text-sm font-medium text-gray-700">Key Milestones</label>
-            <textarea onChange={handleChange} value={formData.milestones} id="milestones" name="milestones" rows="4" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Enter each milestone on a new line with its expected completion date" required></textarea>
+            <textarea onChange={handleChange} value={formData.milestones} id="milestones" name="milestones" rows="4" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Enter each milestone on a new line with its expected completion date" ></textarea>
           </div>
         </section>
 
@@ -176,7 +184,7 @@ const CreateProjectForm = () => {
           <h2 className="text-xl font-semibold mb-4">7. Risks and Challenges</h2>
           <div>
             <label htmlFor="risks" className="block text-sm font-medium text-gray-700">Potential Risks and Mitigation Strategies</label>
-            <textarea onChange={handleChange} value={formData.risks} id="risks" name="risks" rows="4" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Describe potential risks and their mitigation strategies" required></textarea>
+            <textarea onChange={handleChange} value={formData.risks} id="risks" name="risks" rows="4" className="mt-1 block w-full rounded-md border-2 border-blue-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="Describe potential risks and their mitigation strategies" ></textarea>
           </div>
         </section>
 
@@ -216,7 +224,7 @@ const CreateProjectForm = () => {
         {/* Submit Button */}
         <div className="flex justify-end">
           <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Create Project
+            next step
           </button>
         </div>
       </form>

@@ -6,11 +6,12 @@ const { ObjectId } = require('mongodb');
 
 // task route
 taskrouter.route("/").post(async (req, res) => {
-    const { email } = req.body;
+    const { email ,department} = req.body;
     try {
         const tasks = await db.find({ $or:[
             {employee_email:email},
             {manager_email:email},
+            {department:department,type:"conflict"}
         ] }); // Await the findOne operation
         res.status(200).json(tasks);
     } catch (error) {
@@ -37,10 +38,12 @@ taskrouter.route("/assigntask").post(async(req,res)=>{
         deadline,
         description,
         additionalNotes,
-        references} = req.body;
+        references,
+        type} = req.body;
         // console.log("Task details:", taskName, date, assignedBy, department, status, post, time, priority, deadline, description, additionalNotes, references);
 
         
+        console.log(manager_email);
         
         const task = new db({
             manager_email,
@@ -58,8 +61,10 @@ taskrouter.route("/assigntask").post(async(req,res)=>{
             additional_notes:additionalNotes,
             references,
             res_details:"",
-            res_notes:""
+            res_notes:"",
+            type,
         })
+        
        const saved_task =  await task.save();
         console.log("Task saved successfully:", task);
         res.status(201).json({id:saved_task._id});

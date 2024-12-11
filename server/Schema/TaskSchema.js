@@ -65,11 +65,15 @@ const taskSchema = new mongoose.Schema({
         type: String,
         default: ''
       },
+      
       res_notes: {
         type: String,
         default: ''
       },
-    
+      type: {
+        type: String,
+        default: ''
+      },
 });
 
 const db =  mongoose.model('task', taskSchema);;
