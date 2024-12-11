@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginBack from '../Images/LoginBack.png'; // The image you want to use
 import { useLoginContext } from '../ContextApi/Logincontext';
+import { useUserContext } from '../../src/UserContext';
 
 const Login = () => {
   const { login } = useLoginContext(); // Get the login function from the context
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { user, updateUser }  = useUserContext();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -20,7 +21,7 @@ const Login = () => {
       body: JSON.stringify({ email, password })
     });
     const data = await response.json();
-
+    updateUser({email});
     if (response.status === 200) {
       console.log(data.userdata);
       login(data);

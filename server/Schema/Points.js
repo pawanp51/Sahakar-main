@@ -13,6 +13,11 @@ const PointSchema = new mongoose.Schema({
     type: [[Number]],
     required: true,
   },
+  color: {
+    type: String,
+    required: true,
+  },
+  
 });
 
 module.exports = mongoose.model('Points', PointSchema);

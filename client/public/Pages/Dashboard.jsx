@@ -101,7 +101,7 @@ const Dashboard = () => {
         <div
           className="relative w-full h-52 cursor-pointer rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.3)] transform transition duration-300 hover:scale-105 overflow-hidden"
           style={{ border: '1px solid black', borderRadius: '20px' }}
-          onClick={() => navigate('/Discussion')}
+          onClick={() => navigate('/Forum/IntraDepartment')}
         >
           <div
             className="w-full h-5/6 bg-cover bg-center"

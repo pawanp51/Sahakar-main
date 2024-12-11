@@ -6,19 +6,23 @@ import L from 'leaflet';
 const Geotagging = ({ initialCenter }) => {
   const [center, setCenter] = useState(initialCenter || [18.5204, 73.8567]);
   const [lines, setLines] = useState([]); // Use state to store line coordinates
-
+  const [colors, setColors] = useState([]);
   // Fetch points from the API
+  
   async function getPoints() {
     try {
       const response = await fetch("http://localhost:3000/api/points");
       const res = await response.json();
-
+      const allColors = [];
       const allLines = [];
       res.forEach((item) => {
+        const color = item.color;
+        console.log(color)
         const line = item.coordinates.map((coords) => [coords[0], coords[1]]);
+        allColors.push(color);
         allLines.push(line);
       });
-
+      setColors(allColors);
       setLines(allLines); // Update state with fetched lines
     } catch (error) {
       console.error("Error fetching points:", error);
@@ -51,7 +55,7 @@ const Geotagging = ({ initialCenter }) => {
               attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
             />
             {lines.map((line, index) => (
-              <Polyline key={index} positions={line} color="blue" />
+              <Polyline key={index} positions={line} color={colors[index]} />
             ))}
           </MapContainer>
         </div>

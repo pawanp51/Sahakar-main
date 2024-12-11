@@ -10,13 +10,14 @@ pointRouter.route("/").get(async(req, res) => {
 })
 
 pointRouter.route("/").post(async(req, res) => {
-    const { projectName, coordinates ,department} = req.body;
+    const { projectName, coordinates ,department,color} = req.body;
     try{
 
         const points = new project_db({
             projectName,
             department, 
             coordinates,
+            color,
         })
        const saved_points =  await points.save();
         console.log("Points saved successfully:", points);

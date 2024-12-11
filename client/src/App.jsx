@@ -24,7 +24,6 @@ import Approve from '../public/Pages/Task_pages/Approve.jsx';
 import Inc_req from '../public/Pages/Inventory_pages/Inc_req.jsx';
 import Out_req from '../public/Pages/Inventory_pages/Out_req.jsx';
 import TopBanner from '../public/Components/TopBanner.jsx';
-import Discussion from '../public/Pages/Discussion.jsx';
 import CreateTask from '../public/Pages/Task_pages/CreateTask.jsx';
 import Expense from '../public/Pages/Project_pages/Expense.jsx';
 import OfficeBudget from '../public/Pages/Project_pages/OfficeBudget.jsx';
@@ -37,14 +36,20 @@ import CreateGIS from '../public/Pages/GIS_pages/CreateGIS.jsx';
 import ReceivedGIS from '../public/Pages/GIS_pages/receivedGIS.jsx';
 import MarkingGeotag from '../public/Pages/Project_pages/markingGeotag.jsx';
 import Conflict from '../public/Pages/Project_pages/conflict.jsx';
-
+import MessagePage from '../public/Pages/DiscussionForum/MessagePage.jsx';
+import Discussion from '../public/Pages/DiscussionForum/Discussion.jsx';
+import { UserProvider } from './UserContext.jsx';
+import Forum from "../public/Pages/DiscussionForum/Forum.jsx"
+import InterDepartmentForum from '../public/Pages/DiscussionForum/InterDepartmentForum.jsx';
+import IntraDepartmentForum from '../public/Pages/DiscussionForum/IntraDepartmentForum.jsx';
+import PostDetails from '../public/Pages/DiscussionForum/PostDetail.jsx';
 import '../src/App.css';
 import ScheduleMeeting from '../public/Components/ScheduleMeeting.jsx';
 
 const App = () => {
   return (
     <>
-      
+      <UserProvider>
         <TopBanner />
         <Routes>
           <Route path="/" element={<Login />} />
@@ -74,7 +79,6 @@ const App = () => {
           <Route path="/MyInventory" element={<MyInventory />} />
           <Route path="/Inc_req" element={<Inc_req />} />
           <Route path="/Out_req" element={<Out_req />} />
-          <Route path="/Discussion" element={<Discussion />} />
           <Route path="/schedulemeeting" element={<ScheduleMeeting/>} />
           <Route path="/ScheduleMeeting" element={<ScheduleMeeting />} />
           <Route path="/Staff" element={<Staff />} />
@@ -86,9 +90,16 @@ const App = () => {
           <Route path='/receivedGIS' element={<ReceivedGIS />} />
           <Route path='/markGeotag' element={<MarkingGeotag />} />
           <Route path='/conflict' element={<Conflict />} />
-          
+          <Route path ="/Forum" element = {<Forum />} >
+            <Route path ="/Forum/InterDepartment" element = {<InterDepartmentForum />} />
+            <Route path ="/Forum/IntraDepartment" element = {<IntraDepartmentForum />} />
+          </Route>
+          <Route path="/Forum/post/:postId" element={<PostDetails />} />
+          <Route path="/Forum/Discussion" element={<Discussion />} >
+            <Route path = "/Forum/Discussion/:userId" element={<MessagePage />}/>
+          </Route>
         </Routes>
-      
+      </UserProvider>
     </>
   );
 };

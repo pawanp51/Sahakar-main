@@ -10,12 +10,14 @@ const Complaints = require('./Schema/Complaints');
 const GISmap = require('./Schema/GISmap');
 const GISRequestAccept = require('./Schema/GISrequestaccept');
 const Points = require('./Schema/Points');
-
-const app = express();
+const router = require("./routes/routing");
+const {app, server} = require("./socket/index");
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+
+app.use("/api", router);
 
 // Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -407,4 +409,4 @@ app.get('/api/send-coordinates/:email', async (req, res) => {
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

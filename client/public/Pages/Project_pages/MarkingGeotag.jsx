@@ -17,14 +17,14 @@ const customMarkerIcon = new L.Icon({
   shadowSize: [32, 32],
 });
 
-const MapClickHandler = ({ selectedPoints, setSelectedPoints, lines, setLines, allPoints, setallPoints, projdata }) => {
+const MapClickHandler = ({ selectedPoints, setSelectedPoints, lines, setLines, allPoints, setallPoints, projdata ,color}) => {
   useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
       console.log(lat);
       console.log(lng);
 
-      setallPoints([...allPoints, [lat, lng , projdata.projectTitle]]);
+      setallPoints([...allPoints, [lat, lng , projdata.projectTitle,color]]);
       console.log('Printing all points', allPoints)
 
       if (selectedPoints.length < 2) {
@@ -44,13 +44,13 @@ const MapClickHandler = ({ selectedPoints, setSelectedPoints, lines, setLines, a
 };
 
 const MarkingGeotag = ({ initialCenter, email, department }) => {
-  const {setallpts , projdata} = usegeotagContext(); 
+  const { setallpts, projdata } = usegeotagContext(); 
   const [projectLocations, setProjectLocations] = useState([]);
   const [center, setCenter] = useState(initialCenter || [18.5204, 73.8567]);
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [lines, setLines] = useState([]);
   const [allPoints, setallPoints] = useState([]);
-  
+  const [selectedColor, setSelectedColor] = useState(''); // Manage the selected radio button state
 
   useEffect(() => {
     if (initialCenter) {
@@ -59,16 +59,44 @@ const MarkingGeotag = ({ initialCenter, email, department }) => {
   }, [initialCenter]);
   
   const navigate = useNavigate();
+
   const handleSaveLines = async () => {
     setallpts(allPoints);
-    navigate('/conflict')
-  };  
-  
+    navigate('/conflict');
+  };
+
+  const handleColorChange = (e) => {
+    setSelectedColor(e.target.id); // Update the selected color when a radio button is clicked
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4 relative">
       <div className="max-w-4xl w-full bg-white shadow-md rounded-lg p-8 mb-4">
         <h1 className="text-2xl font-bold mb-4">Create GIS for the requested latitude and longitude</h1>
+
+        <div className="mb-4">
+          <input
+            type="radio"
+            name="color"
+            id="blue"
+            checked={selectedColor === 'blue'}
+            onChange={handleColorChange}
+          /> Blue
+          <input
+            type="radio"
+            name="color"
+            id="red"
+            checked={selectedColor === 'red'}
+            onChange={handleColorChange}
+          /> Red
+          <input
+            type="radio"
+            name="color"
+            id="brown"
+            checked={selectedColor === 'brown'}
+            onChange={handleColorChange}
+          /> Brown
+        </div>
 
         <div className="relative z-10">
           <MapContainer
@@ -90,6 +118,7 @@ const MarkingGeotag = ({ initialCenter, email, department }) => {
               allPoints={allPoints}
               setallPoints={setallPoints}
               projdata={projdata}
+              color = {selectedColor}
             />
 
             {projectLocations.map((project, index) => (
@@ -105,7 +134,7 @@ const MarkingGeotag = ({ initialCenter, email, department }) => {
             ))}
 
             {lines.map((line, index) => (
-              <Polyline key={index} positions={line} color="blue" />
+              <Polyline key={index} positions={line} color={selectedColor} />
             ))}
           </MapContainer>
         </div>

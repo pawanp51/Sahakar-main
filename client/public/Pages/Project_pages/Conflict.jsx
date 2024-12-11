@@ -8,6 +8,7 @@ const Conflict = () => {
   const [data, setData] = useState(null);
   const [checked, setChecked] = useState(false);
   const [conflicts, setConflicts] = useState([]);
+  const [reqnoc,setreqnoc] = useState(true);
  const {user} = useLoginContext();
  
 
@@ -50,11 +51,14 @@ const Conflict = () => {
         allpts.map((pt)=>{
             array.push([pt[0],pt[1]]);
         })
+
         var rec = {
             projectName:allpts[0][2],
             department:user.department,
             coordinates:array,
+            color:allpts[0][3],
         }
+        
         console.log("rec :",rec);
         
         const response = await fetch("http://localhost:3000/api/points",{
@@ -166,6 +170,11 @@ const Conflict = () => {
     }
   }, [data, checked, allpts]);
 
+  useEffect(()=>{
+    if(conflicts.length===0){
+      setreqnoc(false);
+    }
+  },[conflicts])
   return (
     <div>
       <h1>Conflicts</h1>
@@ -195,14 +204,23 @@ const Conflict = () => {
         <p>No conflicts found.</p>
       )}
 
-        {!conflicts ? (
+{conflicts.length > 0 ? (
+  <button
+    type="submit"
+    onClick={handleNOC}
+    className="px-4 py-2 mt-16 ml-8 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+  >
+    Request NOC
+  </button>
+) : (
+  <button
+    onClick={handleRegister}
+    className="px-4 py-2 mt-16 ml-8 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+  >
+    Register Project
+  </button>
+)}
 
-        <button type="submit" onClick={handleNOC} className="px-4 py-2 mt-16 ml-8 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Request NOC
-        </button>
-        ):(
-         <button onClick={handleRegister}>register project</button>
-        )}
     </div>
   );
 };

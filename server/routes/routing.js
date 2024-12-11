@@ -1,0 +1,20 @@
+const express = require("express");
+const registerUser = require("../controller/registerUser");
+const userDetails = require("../controller/userDetails");
+const searchUser = require("../controller/searchUser");
+const postNewThread = require("../controller/postNewThread");
+const loadPost = require("../controller/loadPost");
+const getPost = require("../controller/getPost");
+const getComments = require("../controller/getComments");
+const addComment = require("../controller/addComment");
+const router = express.Router();
+
+router.post("/register", registerUser);
+router.get("/user-details",userDetails);
+router.post("/search-user", searchUser);
+router.post("/upload-post", postNewThread);
+router.get("/get-post",getPost);
+router.get("/get-post-details",loadPost);
+router.get("/get-comments",getComments);
+router.post("/add-comment",addComment);
+module.exports = router;
