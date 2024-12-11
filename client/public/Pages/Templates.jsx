@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
@@ -5,35 +6,31 @@ import { saveAs } from 'file-saver';
 
 const departments = {
   water: {
-    title: "Office Memorandum",
-    type: "Reports, Letters, Maintenance Schedules, Compliance Documents",
+    title: "No Objection Certificate (NOC)",
+    type: "Official Clearances, Approvals",
     description:
-      "An office memorandum is an internal document written to inform employees of policy, procedures, announcements, or instructions.",
-    letter: `[Government of India Letterhead/Department Letterhead]
+      "A No Objection Certificate is a legal document issued by an organization or entity to declare no objection to the details mentioned within the certificate.",
+    letter: `[Government of India Letterhead/Organization Letterhead]
 [Address of the issuing office]
 [Date: DD/MM/YYYY]
-Office Order No: [Order Number, if applicable]
+Reference No: [Reference Number]
 
-To,
-[Recipient Name]
-[Recipient’s Designation]
-[Recipient's Department/Office]
-[Address]
+To Whom It May Concern,
 
-Subject: Internal Office Policy Update
+Subject: No Objection Certificate
 
-Dear [Recipient],
+This is to certify that [Name of the Individual/Entity], residing at [Address], is/was associated with [Organization/Institution Name] as [Designation/Role] from [Start Date] to [End Date] (if applicable). During their association, their conduct and performance have been satisfactory.
 
-This memorandum serves as a notification regarding [Policy/Procedure]. Please be advised that the following changes will take effect immediately.
+We have no objection to [Name of the Individual/Entity] [reason for NOC, e.g., applying for higher studies, working with another organization, visiting abroad, etc.]. This certificate is issued at their request for the purpose of [specific purpose of NOC].
 
-First, [Change 1]. Second, [Change 2]. Finally, [Change 3]. We request all concerned individuals to take note of these changes and act accordingly.
-
-For any further clarification, please contact [Department Name]. We appreciate your prompt compliance with these changes.
+For any further clarification, please feel free to contact us at [Contact Information].
 
 Yours sincerely,
 [Your Name]
 [Your Designation]
-[Department Name/Ministry Name]`
+[Organization/Institution Name]
+
+[Seal/Stamp of the Organization]`
   },
   fire: {
     title: "Office Order",
@@ -170,7 +167,7 @@ Office Order No: [Order Number, if applicable]
 
 To,
 [Recipient Name]
-[Recipient’s Designation]
+[Recipient’s Designation] 
 [Recipient's Department/Office]
 [Address]
 
@@ -325,7 +322,6 @@ const Templates = () => {
       };
     }
   };
-  
 
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen p-6">
@@ -339,6 +335,7 @@ const Templates = () => {
               onClick={() => handleOpen(dept)}
             >
               <h2 className="text-2xl font-semibold text-blue-800 mb-4">{dept.title}</h2>
+              <p className="text-gray-600 mb-4">{dept.type}</p>
               <p className="text-gray-600 mb-4">{dept.type}</p>
               <p className="text-gray-700 mb-6">{dept.description}</p>
               <button
@@ -421,3 +418,4 @@ const Templates = () => {
 };
 
 export default Templates;
+              
