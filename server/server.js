@@ -302,16 +302,16 @@ app.get('/api/inventoryrequest', async (req, res) => {
   }
 });
 
-// (async () => {
-//   const dummyComplaints = [
-//     { name: 'Alice', description: 'Road is damaged in my area.', date: new Date(), location: 'Area A', department: null },
-//     { name: 'Bob', description: 'No electricity for two days.', date: new Date(), location: 'Area B', department: null },
-//     { name: 'Charlie', description: 'Garbage collection is irregular.', date: new Date(), location: 'Area C', department: null },
-//   ];
+(async () => {
+  const dummyComplaints = [
+    { name: 'Alice', description: 'Road is damaged in my area.', date: new Date(), location: 'Area A', department: null },
+    { name: 'Bob', description: 'No electricity for two days.', date: new Date(), location: 'Area B', department: null },
+    { name: 'Charlie', description: 'Garbage collection is irregular.', date: new Date(), location: 'Area C', department: null },
+  ];
 
-//   await Complaints.insertMany(dummyComplaints);
-//   console.log('Dummy data inserted');
-// })();
+  await Complaints.insertMany(dummyComplaints);
+  console.log('Dummy data inserted');
+})();
 
 app.post('/api/complaints', async (req, res) => {
   try {

@@ -1,13 +1,13 @@
 const { HfInference } = require("@huggingface/inference");
 const axios = require("axios");
 
-const hf = new HfInference("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");
+const hf = new HfInference("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");
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://localhost:3000/api";
 
 async function classifyDepartment(description) {
   const prompt = `You are an AI system that categorizes complaints into one of these government departments:\n
-    - Electricity Department\n
+    - Electricity\n
     - Gas Supply Department\n
     - Civil Department\n
     - Public Works Department\n
@@ -29,7 +29,7 @@ async function classifyDepartment(description) {
       console.log("Raw generated text:", generatedText);
 
       const match = generatedText.match(
-        /^(Electricity Department|Gas Supply Department|Civil Department|Public Works Department|Urban Planning Department|Emergency Services|Uncategorized)/i
+        /^(Electricity|Gas Supply Department|Civil Department|Public Works Department|Urban Planning Department|Emergency Services|Uncategorized)/i
       );
 
       if (match) {
