@@ -8,7 +8,7 @@ loginrouter.route("/").post(async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await db.findOne({ Email: email }); // Await the findOne operation
+        const user = await db.findOne({ email: email }); // Await the findOne operation
 
         if (user) {
             if (user.password === password) {

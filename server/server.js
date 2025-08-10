@@ -36,7 +36,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 // MongoDB connection
-mongoose.connect("mongodb+srv://pawan:pawanpatil51@cluster0.bzdcd.mongodb.net/", {
+mongoose.connect("mongodb+srv://pawan:pawanpatil51@cluster0.lyvoaaw.mongodb.net/", {
   dbName: 'Sahakar',
   useNewUrlParser: true,
   useUnifiedTopology: true,
